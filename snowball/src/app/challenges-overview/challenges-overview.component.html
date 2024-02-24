@@ -1,0 +1,11 @@
+<div>
+    <mat-form-field>
+        <mat-label>Challenge name</mat-label>
+        <input matInput placeholder="Search..">
+    </mat-form-field>
+    <ul>
+        <li *ngFor="let challenge of this._data.values()">
+            <span>{{challenge.name}}</span>
+        </li>
+    </ul>
+</div>
