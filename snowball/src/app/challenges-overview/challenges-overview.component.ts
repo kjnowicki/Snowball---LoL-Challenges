@@ -29,21 +29,47 @@ export class ChallengesOverviewComponent {
   displayedColumns: string[] = ['name', 'category'];
   public _data = new MatTableDataSource<Challenge>();
   public dataLoaded = false;
+  public gameLaunched = true;
   private _port!: string;
   private _token!: string;
 
   constructor(public ref: ApplicationRef) {
-    overwolf.games.launchers.events.getInfo(
-      10902,
-      (result: overwolf.games.launchers.events.GetInfoResult) => {
-        this._port = result.res.credentials.port;
-        this._token = result.res.credentials.token;
-        this.getChallenges();
+    overwolf.games.launchers.getRunningLaunchersInfo((data) => {
+      if (data.launchers.filter((l) => l.classId == 10902).length > 0) {
+        this.setupData();
+      } else {
+        this.gameLaunched = false;
       }
-    );
+      overwolf.games.launchers.onLaunched.addListener((data) => {
+        if (data.classId == 10902) {
+          this.gameLaunched = true;
+          this.setupData();
+        }
+      });
+    });
     this._data.filterPredicate = (challenge, filterValue) => {
       return challenge.name.toLowerCase().includes(filterValue.toLowerCase());
     };
+  }
+
+  private setupData() {
+    let retries = 0;
+    let timer = window.setInterval(() => {
+      overwolf.games.launchers.events.getInfo(
+        10902,
+        (result: overwolf.games.launchers.events.GetInfoResult) => {
+          try {
+            this._port = result.res.credentials.port;
+            this._token = result.res.credentials.token;
+            this.getChallenges();
+          } catch (ignored: unknown) {
+            if(ignored instanceof TypeError) return;
+          }
+        }
+      );
+      if (retries > 20 || this._port != undefined) clearInterval(timer);
+      else retries++;
+    }, 250);
   }
 
   private getChallenges() {

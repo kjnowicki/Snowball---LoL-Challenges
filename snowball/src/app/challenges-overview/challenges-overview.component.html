@@ -28,8 +28,10 @@
         <tr mat-row  (click)="{}" 
          *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
-    } @else {
+    } @else if(gameLaunched) {
       <mat-progress-bar color="accent" mode="query"></mat-progress-bar>
+    } @else {
+      <h2 style="color: white; margin: 15px;">Running LoL Client is required for data to be loaded.</h2>
     }
   </div>
   <mat-drawer #drawer class="example-sidenav" mode="over" position="end">

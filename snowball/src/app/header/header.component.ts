@@ -28,7 +28,7 @@ export class HeaderComponent implements AfterViewInit{
 
     this.currentWindow.dragMove(this.header);
     this.close.addEventListener('click', () => {
-      this.currentWindow.close();
+      this.currentWindow.hide();
     });
 
     this.minimize.addEventListener('click', () => {

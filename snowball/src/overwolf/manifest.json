@@ -16,10 +16,11 @@
   "permissions": [
     "Hotkeys",
     "GameInfo",
-    "Web"
+    "Web",
+    "Tray"
   ],
   "data": {
-    "start_window": "Main",
+    "start_window": "bg",
     "hotkeys": {
       "showhide": {
         "title": "Show/Hide In-Game Window",
@@ -33,14 +34,16 @@
     "externally_connectable": {
       "matches": [
         "http://*.overwolf.com",
-        "https://*.overwolf.com",
-        "https://*.google-analytics.com",
-        "http://*.google-analytics.com",
-        "https://www.googleapis.com"
+        "https://*.overwolf.com"
       ]
     },
     "force_browser": "user",
     "windows": {
+      "bg": {
+        "file": "index.html",
+        "background_optimization": false,
+        "is_background_page": true
+      },
       "Main": {
         "file": "index.html",
         "background_optimization": false,
@@ -49,6 +52,8 @@
         "transparent": true,
         "resizable": true,
         "use_os_windowing": true,
+        "open_dev_tools": true,
+        "override_on_update": true,
         "size": {
           "width": 1212,
           "height": 699
