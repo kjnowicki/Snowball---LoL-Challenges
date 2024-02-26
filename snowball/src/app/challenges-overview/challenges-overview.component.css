@@ -1,0 +1,27 @@
+table * {
+    color: white;
+    background-color: rgb(17, 133, 175);
+}
+table th {
+    background-color: rgb(17, 94, 165);
+}
+
+mat-drawer-container {
+    height: calc(100vh - 64px);
+    background-color: rgb(17, 94, 165);
+}
+
+tr td {
+    border-bottom: 1px solid transparent;
+    border-top: 1px solid transparent;
+    cursor: pointer;
+}
+
+tr:hover td {
+    border-color: white;
+}
+
+td a:hover {
+    color: black;
+}
+  

@@ -1,8 +1,13 @@
-<header id="header" class="app-header">
-    <h1>SNOWBALL</h1>
-    <div class="window-controls-group">
-      <button id="minimizeButton" class="window-control window-control-minimize"></button>
-      <button id="maximizeButton" class="window-control window-control-maximize"></button>
-      <button id="closeButton" class="window-control window-control-close"></button>
-    </div>
-</header>
+<mat-toolbar mat-sticky id="header" class="app-header">
+  <span>Snowball - LoL Challenges</span>
+  <span class="spacer" style="flex: 1 1 auto;"></span>
+  <button mat-icon-button id="minimizeButton">
+    <mat-icon>minimize</mat-icon>
+  </button>
+  <button mat-icon-button id="maximizeButton">
+    <mat-icon>maximize</mat-icon>
+  </button>
+  <button mat-icon-button id="closeButton">
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-toolbar>

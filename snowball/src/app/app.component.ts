@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ApplicationRef, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ChallengesOverviewComponent } from './challenges-overview/challenges-overview.component';
 import { HeaderComponent } from './header/header.component';
@@ -12,4 +12,10 @@ import { HeaderComponent } from './header/header.component';
 })
 export class AppComponent {
   title = 'snowball';
+
+  constructor(private ref: ApplicationRef){
+    setInterval(() => {
+      ref.tick();
+    }, 100);
+  }
 }

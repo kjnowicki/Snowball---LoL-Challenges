@@ -1,11 +1,38 @@
-<div>
-    <mat-form-field>
-        <mat-label>Challenge name</mat-label>
-        <input matInput placeholder="Search..">
-    </mat-form-field>
-    <ul>
-        <li *ngFor="let challenge of this._data.values()">
-            <span>{{challenge.name}}</span>
-        </li>
-    </ul>
-</div>
+<mat-drawer-container>
+  <div>
+    <div>
+      <mat-form-field subscriptSizing="dynamic" style="width: 100%;">
+        <mat-label>Search challenge</mat-label>
+        <input matInput placeholder="name/description/category.."  (input)="updateFilter($event)"/>
+      </mat-form-field>
+      <a *ngIf="false" mat-flat-button (click)="drawer.toggle()">
+        Zaawansowane filtry
+      </a>
+    </div>
+    @if (dataLoaded) {
+      <table #tableData mat-table [dataSource]="this._data">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name [click to view]</th>
+          <td mat-cell *matCellDef="let challenge">
+            <a mat-flat-button style="font-size: larger;">{{ challenge.name }}</a>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="category">
+          <th mat-header-cell *matHeaderCellDef>Category [click]</th>
+          <td mat-cell *matCellDef="let challenge">
+            <a mat-flat-button>{{ challenge.category }}</a>
+          </td>
+        </ng-container>
+  
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row  (click)="{}" 
+         *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    } @else {
+      <mat-progress-bar color="accent" mode="query"></mat-progress-bar>
+    }
+  </div>
+  <mat-drawer #drawer class="example-sidenav" mode="over" position="end">
+    <p>Auto-resizing sidenav</p>
+  </mat-drawer>
+</mat-drawer-container>
