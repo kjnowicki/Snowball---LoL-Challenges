@@ -1,2 +1,10 @@
 <app-header></app-header>
-<challenges-overview>
+
+@switch (currentNavigationSwitch) {
+    @case (navigationSwitch.START) {
+        <challenges-overview (challengeChosen)="chooseChallengeEvent($event)"></challenges-overview>
+    }
+    @case (navigationSwitch.CH_DETAILS) {
+        <challenge-details [challenge]="chosenChallenge" (close)="this.currentNavigationSwitch = navigationSwitch.START"></challenge-details>
+    }
+}

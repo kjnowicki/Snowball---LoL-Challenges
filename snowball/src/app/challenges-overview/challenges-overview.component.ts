@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ApplicationRef, Component } from '@angular/core';
+import { ApplicationRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCommonModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -7,7 +7,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { Challenge } from '../../model/challenges';
+import { Challenge } from '../../model/challenge';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'challenges-overview',
@@ -25,7 +26,7 @@ import { Challenge } from '../../model/challenges';
   templateUrl: './challenges-overview.component.html',
   styleUrl: './challenges-overview.component.css',
 })
-export class ChallengesOverviewComponent {
+export class ChallengesOverviewComponent implements OnInit{
   displayedColumns: string[] = ['name', 'category'];
   public _data = new MatTableDataSource<Challenge>();
   public dataLoaded = false;
@@ -33,7 +34,12 @@ export class ChallengesOverviewComponent {
   private _port!: string;
   private _token!: string;
 
+  @Output() challengeChosen = new EventEmitter<Challenge>();
+
   constructor(public ref: ApplicationRef) {
+  }
+
+  ngOnInit(): void {
     overwolf.games.launchers.getRunningLaunchersInfo((data) => {
       if (data.launchers.filter((l) => l.classId == 10902).length > 0) {
         this.setupData();
@@ -63,7 +69,7 @@ export class ChallengesOverviewComponent {
             this._token = result.res.credentials.token;
             this.getChallenges();
           } catch (ignored: unknown) {
-            if(ignored instanceof TypeError) return;
+            if (ignored instanceof TypeError) return;
           }
         }
       );

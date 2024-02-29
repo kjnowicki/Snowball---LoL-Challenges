@@ -1,19 +1,24 @@
 import { ApplicationRef, Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 import { ChallengesOverviewComponent } from './challenges-overview/challenges-overview.component';
 import { HeaderComponent } from './header/header.component';
-import { OWGameListener, OWWindow } from '@overwolf/overwolf-api-ts/dist';
+import { OWWindow } from '@overwolf/overwolf-api-ts/dist';
+import { ChallengeDetailsComponent } from './challenge-details/challenge-details.component';
+import { Challenge } from '../model/challenge';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HeaderComponent, ChallengesOverviewComponent],
+  imports: [
+    HeaderComponent,
+    ChallengesOverviewComponent,
+    ChallengeDetailsComponent,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
 export class AppComponent {
   desktopWindow = new OWWindow('Main');
-  mainWindow = new OWWindow("bg");
+  mainWindow = new OWWindow('bg');
   title = 'snowball';
 
   trayMenu = {
@@ -25,6 +30,11 @@ export class AppComponent {
     ],
   };
 
+  currentNavigationSwitch = NavigationSwitch.START;
+  navigationSwitch = NavigationSwitch;
+
+  chosenChallenge: Challenge | undefined;
+
   constructor(private ref: ApplicationRef) {
     setInterval(() => {
       ref.tick();
@@ -34,7 +44,14 @@ export class AppComponent {
   }
 
   private setOverwolfMechanisms() {
-    overwolf.os.tray.setMenu(this.trayMenu, () => { });
+    if (!window.location?.search?.includes('gamelaunchevent')) {
+      this.desktopWindow.restore();
+    }
+    overwolf.extensions.onAppLaunchTriggered.addListener(launchEvent => {
+      this.desktopWindow.restore();
+    });
+
+    overwolf.os.tray.setMenu(this.trayMenu, () => {});
     overwolf.os.tray.onMenuItemClicked.addListener((data) => {
       if (data.item == 'exit') {
         this.mainWindow.close();
@@ -46,8 +63,18 @@ export class AppComponent {
 
     overwolf.games.launchers.onTerminated.addListener((data) => {
       if (data.classId == 10902) {
-        this.desktopWindow.hide();
+        this.mainWindow.close();
       }
     });
   }
+
+  chooseChallengeEvent(challenge: Challenge) {
+    this.chosenChallenge = challenge;
+    this.currentNavigationSwitch = NavigationSwitch.CH_DETAILS;
+  }
+}
+
+export enum NavigationSwitch {
+  START,
+  CH_DETAILS,
 }

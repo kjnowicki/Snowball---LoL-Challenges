@@ -14,7 +14,7 @@
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef>Name [click to view]</th>
           <td mat-cell *matCellDef="let challenge">
-            <a mat-flat-button style="font-size: larger;">{{ challenge.name }}</a>
+            <a mat-flat-button style="font-size: larger;" (click)="this.challengeChosen.emit(challenge)">{{ challenge.name }}</a>
           </td>
         </ng-container>
         <ng-container matColumnDef="category">

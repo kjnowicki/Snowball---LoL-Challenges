@@ -1,0 +1,29 @@
+<button mat-icon-button (click)="close.emit()">
+  <mat-icon>keyboard_arrow_left</mat-icon>
+</button>
+<h1 style="display: inline">{{ challenge?.name }}</h1>
+<p style="margin-left: 15px">
+  <i>{{ challenge?.description }}</i>
+</p>
+<mat-divider style="background-color: white"></mat-divider>
+<div id="details">
+  <p *ngIf="challenge?.childrenIds?.length">
+    <b>Sub-challenges:</b>
+    <span *ngFor="let id of challenge?.childrenIds"> {{ id }}</span>
+  </p>
+  <div>
+    <span>Current level: {{ challenge?.currentLevel }} | </span>
+    <span
+      >Progress: {{ challenge?.currentValue }} /
+      {{ challenge?.nextThreshold }}</span
+    >
+  </div>
+  <div *ngIf="getAvailableItems().length > 0">
+    <h3>Available {{challenge?.idListType?.toLowerCase()}}s:</h3>
+    <span>{{getAvailableItems().sort().join(", ")}}</span>
+  </div>
+  <div *ngIf="getCompletedItems().length > 0">
+    <h3>Completed {{challenge?.idListType?.toLowerCase()}}s:</h3>
+    <span>{{getCompletedItems().sort().join(", ")}}</span>
+  </div>
+</div>

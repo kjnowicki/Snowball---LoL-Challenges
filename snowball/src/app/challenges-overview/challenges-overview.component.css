@@ -22,6 +22,6 @@ tr:hover td {
 }
 
 td a:hover {
-    color: black;
+    background-color: rgb(17, 94, 165);
 }
   

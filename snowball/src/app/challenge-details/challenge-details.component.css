@@ -1,0 +1,13 @@
+* {
+    color: white;
+}
+
+button:hover + h1 {
+    color: aqua;
+}
+
+#details {
+    padding-inline: 25px;
+    padding-block:  10px;
+    background-color: rgb(17, 94, 165);
+}
