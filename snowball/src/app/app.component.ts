@@ -4,6 +4,8 @@ import { HeaderComponent } from './header/header.component';
 import { OWWindow } from '@overwolf/overwolf-api-ts/dist';
 import { ChallengeDetailsComponent } from './challenge-details/challenge-details.component';
 import { Challenge } from '../model/challenge';
+import { ChallengesService } from './challenges.service';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +14,7 @@ import { Challenge } from '../model/challenge';
     HeaderComponent,
     ChallengesOverviewComponent,
     ChallengeDetailsComponent,
+    MatProgressBarModule,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
@@ -20,6 +23,8 @@ export class AppComponent {
   desktopWindow = new OWWindow('Main');
   mainWindow = new OWWindow('bg');
   title = 'snowball';
+  dataLoaded = false;
+  gameLaunched = true;
 
   trayMenu = {
     menu_items: [
@@ -35,12 +40,26 @@ export class AppComponent {
 
   chosenChallenge: Challenge | undefined;
 
-  constructor(private ref: ApplicationRef) {
+  constructor(private ref: ApplicationRef, chService: ChallengesService) {
     setInterval(() => {
       ref.tick();
     }, 100);
 
+    chService.challenges.subscribe(() => this.dataLoaded = true);
+
     this.setOverwolfMechanisms();
+    
+    overwolf.games.launchers.getRunningLaunchersInfo((data) => {
+      if (data.launchers.filter((l) => l.classId == 10902).length > 0) {
+      } else {
+        this.gameLaunched = false;
+      }
+      overwolf.games.launchers.onLaunched.addListener((data) => {
+        if (data.classId == 10902) {
+          this.gameLaunched = true;
+        }
+      });
+    });
   }
 
   private setOverwolfMechanisms() {

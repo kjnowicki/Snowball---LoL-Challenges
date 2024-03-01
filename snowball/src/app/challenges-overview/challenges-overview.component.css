@@ -1,27 +1,38 @@
 table * {
-    color: white;
-    background-color: rgb(17, 133, 175);
+  color: white;
+  background-color: rgb(17, 133, 175);
 }
-table th {
-    background-color: rgb(17, 94, 165);
+table th,
+table th * {
+  background-color: rgb(17, 94, 165);
 }
 
 mat-drawer-container {
-    height: calc(100vh - 64px);
-    background-color: rgb(17, 94, 165);
+  height: calc(100vh - 64px);
+  background-color: rgb(17, 94, 165);
 }
 
 tr td {
-    border-bottom: 1px solid transparent;
-    border-top: 1px solid transparent;
-    cursor: pointer;
+  border-bottom: 1px solid transparent;
+  border-top: 1px solid transparent;
+  cursor: pointer;
+  padding-block: 5px;
 }
 
-tr:hover td {
-    border-color: white;
+tr:hover * {
+  background-color: rgb(17, 94, 165);
+  font-weight: 500;
 }
 
 td a:hover {
-    background-color: rgb(17, 94, 165);
+  color: aqua;
 }
-  
+
+th.mat-column-name span,
+th.mat-column-category span {
+  padding-left: 15px;
+}
+
+.mat-column-description {
+  max-width: 25vw;
+}

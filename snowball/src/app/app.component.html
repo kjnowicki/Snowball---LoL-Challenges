@@ -1,10 +1,18 @@
 <app-header></app-header>
-
+@if(dataLoaded){
 @switch (currentNavigationSwitch) {
-    @case (navigationSwitch.START) {
-        <challenges-overview (challengeChosen)="chooseChallengeEvent($event)"></challenges-overview>
-    }
-    @case (navigationSwitch.CH_DETAILS) {
-        <challenge-details [challenge]="chosenChallenge" (close)="this.currentNavigationSwitch = navigationSwitch.START"></challenge-details>
-    }
+@case (navigationSwitch.START) {
+<challenges-overview (challengeChosen)="chooseChallengeEvent($event)"></challenges-overview>
+}
+@case (navigationSwitch.CH_DETAILS) {
+<challenge-details [challenge]="chosenChallenge"
+    (close)="this.currentNavigationSwitch = navigationSwitch.START"></challenge-details>
+}
+}
+} @else if(gameLaunched) {
+<mat-progress-bar color="accent" mode="query"></mat-progress-bar>
+} @else {
+<h2 style="color: white; margin: 15px">
+    Running LoL Client is required for data to be loaded.
+</h2>
 }
