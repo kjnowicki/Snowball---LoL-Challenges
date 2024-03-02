@@ -1,2 +1,19 @@
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+a {
+  background: none !important;
+  font-weight: 400 !important;
+  color: white !important;
+}
+
+a:hover,
+button:hover mat-icon {
+  color: orange !important;
+}

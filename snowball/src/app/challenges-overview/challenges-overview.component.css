@@ -34,15 +34,6 @@ mat-tree-node + mat-tree-node {
   border-top: none;
 }
 
-a {
-  background: none !important;
-  font-weight: 400 !important;
-}
-
-a:hover {
-  color: orange;
-}
-
 .ch-description {
   max-width: 50%;
 }

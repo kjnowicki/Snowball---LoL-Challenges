@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
-import { Challenge } from '../model/challenge';
+import { Challenge } from '../../model/challenge';
 import { LcuService } from './lcu.service';
 
 @Injectable({

@@ -4,7 +4,7 @@ import { HeaderComponent } from './header/header.component';
 import { OWWindow } from '@overwolf/overwolf-api-ts/dist';
 import { ChallengeDetailsComponent } from './challenge-details/challenge-details.component';
 import { Challenge } from '../model/challenge';
-import { ChallengesService } from './challenges.service';
+import { ChallengesService } from './services/challenges.service';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @Component({

@@ -5,7 +5,7 @@ import {
   Component,
   EventEmitter,
   OnInit,
-  Output
+  Output,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCommonModule } from '@angular/material/core';
@@ -15,8 +15,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTreeModule, MatTreeNestedDataSource } from '@angular/material/tree';
-import { Challenge, Threshold } from '../../model/challenge';
-import { ChallengesService } from '../challenges.service';
+import { Challenge } from '../../model/challenge';
+import { ChallengesService } from '../services/challenges.service';
+import { ChallengeUtils } from '../utils/challengeUtils';
 
 @Component({
   selector: 'challenges-overview',
@@ -35,13 +36,15 @@ import { ChallengesService } from '../challenges.service';
   templateUrl: './challenges-overview.component.html',
   styleUrl: './challenges-overview.component.css',
 })
-export class ChallengesOverviewComponent implements OnInit {
+export class ChallengesOverviewComponent {
   displayedColumns: string[] = ['name', 'description', 'level', 'category'];
   filteredData = new MatTreeNestedDataSource<ChallengeNode>();
   allData: ChallengeNode[];
   treeControl = new NestedTreeControl<ChallengeNode>((node) => node.children);
 
   @Output() challengeChosen = new EventEmitter<Challenge>();
+
+  chUtils = ChallengeUtils;
 
   constructor(
     public ref: ApplicationRef,
@@ -53,12 +56,6 @@ export class ChallengesOverviewComponent implements OnInit {
       this.allData = this.getChallengesNodes();
       this.filteredData.data = this.allData;
     });
-  }
-
-  ngOnInit(): void {
-    // this.filteredData.filterPredicate = (challenge, filterValue) => {
-    //   return challenge.name.toLowerCase().includes(filterValue.toLowerCase());
-    // };
   }
 
   updateFilter(event: Event) {
@@ -130,19 +127,6 @@ export class ChallengesOverviewComponent implements OnInit {
         .filter((child) => child.parentId == challenge.id)
         .map((child) => this.recursiveChallengeNode(child))
     );
-  }
-
-  getChallengeProgress(challenge: Challenge) {
-    if (challenge.nextThreshold == 0)
-      return `${challenge.currentValue} / ${challenge.currentThreshold}`;
-    else {
-      let threshold: Threshold | undefined = new Map(Object.entries(challenge.thresholds)).get(challenge.nextLevel);
-      if(threshold != undefined) {
-        return `${challenge.currentValue} / ${challenge.nextThreshold} (+ ${threshold.rewards.filter(r => r.category == "CHALLENGE_POINTS").at(0)?.quantity} Points)`;
-      } else {
-        return `${challenge.currentValue} / ${challenge.nextThreshold}`;
-      }
-    }
   }
 
   hasChildren = (_: number, node: ChallengeNode) =>

@@ -1,29 +1,69 @@
-<button mat-icon-button (click)="close.emit()">
-  <mat-icon>keyboard_arrow_left</mat-icon>
-</button>
-<h1 style="display: inline">{{ challenge?.name }}</h1>
-<p style="margin-left: 15px">
-  <i>{{ challenge?.description }}</i>
-</p>
-<mat-divider style="background-color: white"></mat-divider>
-<div id="details">
-  <p *ngIf="challenge?.childrenIds?.length">
-    <b>Sub-challenges:</b>
-    <span *ngFor="let id of challenge?.childrenIds"> {{ id }}</span>
+<div [class.content]="!isSubchallenge">
+  @if (isSubchallenge) {
+  <table style="table-layout:fixed; width: 100%;">
+    <tbody>
+      <tr>
+        <td style="padding-block: 5px;">
+          <h3 style="display: inline;"><a style="background: none;" mat-flat-button
+              (click)="this.subChallengeChosenEvent.emit(challenge)">{{ challenge?.name
+              }}</a></h3>
+        </td>
+        <td style="padding-block: 5px; width: 60%; margin-right: 5px;"><i>{{ challenge?.description }}</i></td>
+      </tr>
+    </tbody>
+  </table>
+  } @else {
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <button mat-icon-button (click)="close.emit()">
+            <mat-icon>keyboard_double_arrow_left</mat-icon>
+          </button>
+        </td>
+        @if (challenge?.parentName != '') {
+        <td>
+          <h3 style="margin: 0;"><a style="cursor: pointer;" (click)="chooseParentChallenge()">{{
+              challenge?.parentName
+              }}</a></h3>
+        </td>
+        <td>
+          <mat-icon style="vertical-align: middle;">keyboard_arrow_left</mat-icon>
+        </td>
+        }
+        <td>
+          <h1 style="margin: 0;">{{ challenge?.name }}</h1>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="margin-left: 15px">
+    <i>{{ challenge?.description }}</i>
   </p>
-  <div>
-    <span>Current level: {{ challenge?.currentLevel }} | </span>
-    <span
-      >Progress: {{ challenge?.currentValue }} /
-      {{ challenge?.nextThreshold }}</span
-    >
-  </div>
-  <div *ngIf="getAvailableItems().length > 0">
-    <h3>Available {{challenge?.idListType?.toLowerCase()}}s:</h3>
-    <span>{{getAvailableItems().sort().join(", ")}}</span>
-  </div>
-  <div *ngIf="getCompletedItems().length > 0">
-    <h3>Completed {{challenge?.idListType?.toLowerCase()}}s:</h3>
-    <span>{{getCompletedItems().sort().join(", ")}}</span>
+  }
+  <mat-divider *ngIf="!isSubchallenge"></mat-divider>
+  <div id="details">
+    <div>
+      <b>{{ challenge?.currentLevel }}: </b>
+      <span>{{chUtils.getChallengeProgress(challenge!)}}</span>
+    </div>
+    <div *ngIf="getAvailableItems().length > 0">
+      <h3>Available {{challenge?.idListType?.toLowerCase()}}s:</h3>
+      <span>{{getAvailableItems().sort().join(", ")}}</span>
+    </div>
+    <div *ngIf="getCompletedItems().length > 0">
+      <h3>Completed {{challenge?.idListType?.toLowerCase()}}s:</h3>
+      <span>{{getCompletedItems().sort().join(", ")}}</span>
+    </div>
+    <div *ngIf="!isSubchallenge  && challenge?.childrenIds?.length">
+      <h3>Sub-challenges:</h3>
+      <mat-divider></mat-divider>
+      <div *ngFor="let subChallenge of getSubChallenges(challenge?.childrenIds ?? [])" style="background-color: black;">
+        <challenge-details [challenge]="subChallenge" [isSubchallenge]="true"
+          (subChallengeChosenEvent)="subChallengeChosen($event)">
+        </challenge-details>
+        <mat-divider></mat-divider>
+      </div>
+    </div>
   </div>
 </div>
