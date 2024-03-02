@@ -40,17 +40,17 @@ export interface Challenge {
     valueMapping: string;
 }
 
-interface FriendsLevels {
+export interface FriendsLevels {
     friends: string[];
     level: string;
 }
 
-interface Threshold {
+export interface Threshold {
     rewards: Reward[];
     value: number;
 }
 
-interface Reward {
+export interface Reward {
     asset: string;
     category: string;
     name: string;

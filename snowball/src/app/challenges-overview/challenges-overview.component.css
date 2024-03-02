@@ -1,10 +1,9 @@
-table * {
-  color: white;
-  background-color: rgb(17, 133, 175);
+.tree-invisible {
+  display: none;
 }
-table th,
-table th * {
-  background-color: rgb(17, 94, 165);
+
+mat-tree .mat-nested-tree-node div[role=group] {
+  padding-left: 15px;
 }
 
 mat-drawer-container {
@@ -12,27 +11,44 @@ mat-drawer-container {
   background-color: rgb(17, 94, 165);
 }
 
-tr td {
-  border-bottom: 1px solid transparent;
-  border-top: 1px solid transparent;
-  cursor: pointer;
-  padding-block: 5px;
-}
-
-tr:hover * {
+mat-tree * {
+  color: white;
+  font-weight: 100;
   background-color: rgb(17, 94, 165);
-  font-weight: 500;
 }
 
-td a:hover {
-  color: aqua;
+mat-tree mat-tree-node,
+mat-tree mat-tree-node * {
+  background-color: rgb(17, 133, 175);
 }
 
-th.mat-column-name span,
-th.mat-column-category span {
-  padding-left: 15px;
+mat-nested-tree-node > mat-tree-node {
+  display: block;
 }
 
-.mat-column-description {
-  max-width: 25vw;
+mat-tree-node {
+  border: black 2px solid;
+}
+
+mat-tree-node + mat-tree-node {
+  border-top: none;
+}
+
+a {
+  background: none !important;
+  font-weight: 400 !important;
+}
+
+a:hover {
+  color: orange;
+}
+
+.ch-description {
+  max-width: 50%;
+}
+
+.ch-level,
+.ch-level + span {
+  display: flex;
+  flex-direction: row-reverse;
 }

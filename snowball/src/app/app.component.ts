@@ -43,7 +43,7 @@ export class AppComponent {
   constructor(private ref: ApplicationRef, chService: ChallengesService) {
     setInterval(() => {
       ref.tick();
-    }, 100);
+    }, 200);
 
     chService.challenges.subscribe(() => this.dataLoaded = true);
 
