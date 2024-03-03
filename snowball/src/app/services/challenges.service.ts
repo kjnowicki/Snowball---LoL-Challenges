@@ -8,10 +8,15 @@ import { LcuService } from './lcu.service';
 export class ChallengesService {
   challengesCached: Challenge[] = [];
 
-  @Output() challenges: EventEmitter<Challenge[]> = new EventEmitter<Challenge[]>();
+  @Output() challenges: EventEmitter<Challenge[]> = new EventEmitter<
+    Challenge[]
+  >();
 
   constructor(private lcuService: LcuService) {
-    lcuService.credentials.subscribe(credentials => {
+    lcuService.credentials.subscribe((credentials) => {
+      this.updateChallenges();
+    });
+    overwolf.games.launchers.onUpdated.addListener(() => {
       this.updateChallenges();
     });
   }
@@ -21,7 +26,10 @@ export class ChallengesService {
     const headers: overwolf.web.FetchHeader[] = [];
     headers.push({ key: 'Accept', value: '*/*' });
     headers.push({ key: 'Accept-Encoding', value: 'gzip, deflate, br' });
-    headers.push({ key: 'Authorization', value: 'Basic ' + `${this.lcuService.token}` });
+    headers.push({
+      key: 'Authorization',
+      value: 'Basic ' + `${this.lcuService.token}`,
+    });
     overwolf.web.sendHttpRequest(
       url,
       overwolf.web.enums.HttpRequestMethods.GET,
