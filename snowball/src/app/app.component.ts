@@ -40,7 +40,7 @@ export class AppComponent {
 
   chosenChallenge: Challenge | undefined;
 
-  constructor(private ref: ApplicationRef, chService: ChallengesService) {
+  constructor(private ref: ApplicationRef, private chService: ChallengesService) {
     setInterval(() => {
       ref.tick();
     }, 200);
@@ -84,6 +84,10 @@ export class AppComponent {
       if (data.classId == 10902) {
         this.mainWindow.close();
       }
+    });
+
+    overwolf.games.launchers.onUpdated.addListener(() => {
+      this.chService.updateChallenges();
     });
   }
 

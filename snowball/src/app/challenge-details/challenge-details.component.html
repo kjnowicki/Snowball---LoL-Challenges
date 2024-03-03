@@ -65,5 +65,15 @@
         <mat-divider></mat-divider>
       </div>
     </div>
+    <div *ngIf="challenge?.friendsAtLevels?.length">
+      <h3>Friends leaderboard:</h3>
+      <div style="padding-left: 10px;">
+        @for (level of challenge?.friendsAtLevels?.reverse(); track level) {
+        <h4 mat-subheader [class.yourLevel]="level.level == challenge?.currentLevel">{{level.level}}{{level.level == challenge?.currentLevel ? " <<<" : ""}}</h4>
+        <span>{{this.getFriends(level)}} </span>
+        <mat-divider></mat-divider>
+        }
+      </div>
+    </div>
   </div>
 </div>

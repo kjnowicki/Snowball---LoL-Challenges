@@ -1,25 +1,24 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
-import { Challenge } from '../../model/challenge';
+import { Friend } from '../../model/friend';
 import { LcuService } from './lcu.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ChallengesService {
-  challengesCached: Challenge[] = [];
+export class FriendsService {
+  friendsCached: Array<Friend> = [];
 
-  @Output() challenges: EventEmitter<Challenge[]> = new EventEmitter<
-    Challenge[]
-  >();
+  @Output() friends: EventEmitter<Friend[]> = new EventEmitter();
 
   constructor(private lcuService: LcuService) {
+    this.updateFriends();
     lcuService.credentials.subscribe((credentials) => {
-      this.updateChallenges();
+      this.updateFriends();
     });
   }
 
-  updateChallenges() {
-    let url: string = `https://127.0.0.1:${this.lcuService.port}/lol-challenges/v1/challenges/local-player`;
+  updateFriends() {
+    let url: string = `https://127.0.0.1:${this.lcuService.port}/lol-chat/v1/friends`;
     const headers: overwolf.web.FetchHeader[] = [];
     headers.push({ key: 'Accept', value: '*/*' });
     headers.push({ key: 'Accept-Encoding', value: 'gzip, deflate, br' });
@@ -35,10 +34,8 @@ export class ChallengesService {
       (data) => {
         if (data.data) {
           let json = JSON.parse(data.data);
-          this.challengesCached = Array.from(
-            new Map<string, Challenge>(Object.entries(json)).values()
-          );
-          this.challenges.emit(this.challengesCached);
+          this.friendsCached = Array.from(json);
+          this.friends.emit(this.friendsCached);
         }
       }
     );

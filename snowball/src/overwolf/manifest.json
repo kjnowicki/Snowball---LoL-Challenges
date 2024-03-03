@@ -52,7 +52,6 @@
         "transparent": true,
         "resizable": true,
         "use_os_windowing": true,
-        "open_dev_tools": true,
         "override_on_update": true,
         "size": {
           "width": 1212,

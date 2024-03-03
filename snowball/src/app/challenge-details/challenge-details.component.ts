@@ -3,12 +3,14 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
-import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
-import { Challenge } from '../../model/challenge';
+import { MatListModule } from '@angular/material/list';
+import { Challenge, FriendsLevels } from '../../model/challenge';
 import { Champion, Champions } from '../../model/champion';
 import { ChallengesService } from '../services/challenges.service';
 import { ChallengeUtils } from '../utils/challengeUtils';
+import { FriendsService } from '../services/friends.service';
+import { Friend } from '../../model/friend';
 
 @Component({
   selector: 'challenge-details',
@@ -19,7 +21,7 @@ import { ChallengeUtils } from '../utils/challengeUtils';
     CommonModule,
     MatDividerModule,
     HttpClientModule,
-    MatGridListModule,
+    MatListModule
   ],
   templateUrl: './challenge-details.component.html',
   styleUrl: './challenge-details.component.css',
@@ -35,7 +37,7 @@ export class ChallengeDetailsComponent {
 
   champions: Champion[] = [];
 
-  constructor(private http: HttpClient, private chService: ChallengesService) {
+  constructor(private http: HttpClient, private chService: ChallengesService, private frService: FriendsService) {
     this.readChampionsFromJSON();
   }
 
@@ -47,6 +49,14 @@ export class ChallengeDetailsComponent {
         );
       }
     });
+  }
+
+  getFriend(friendId: string): Friend | undefined {
+    return this.frService.friendsCached.find(fr => fr.puuid == friendId);
+  }
+
+  getFriends(friendsLevel: FriendsLevels): string {
+    return friendsLevel.friends.map(frId => this.getFriend(frId)?.gameName).join(", ");
   }
 
   getAvailableItems(): any[] {
