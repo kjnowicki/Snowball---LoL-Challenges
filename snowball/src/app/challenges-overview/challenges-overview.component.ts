@@ -77,15 +77,18 @@ export class ChallengesOverviewComponent {
           this.challengeNodeRecursivelyContains(node, filterValue)
       )
       .map((node) => {
-        let children =
-          node.children.length > 0
-            ? this.mapFilteredData(
-                node.children,
-                filterValue,
-                parentMatched ||
-                  this.challengeContains(node.challenge, filterValue)
-              )
-            : [];
+        let hasChildren = node.children.length > 0;
+        let challengeMatches = this.challengeContains(
+          node.challenge,
+          filterValue
+        );
+        let children = hasChildren
+          ? this.mapFilteredData(
+              node.children,
+              filterValue,
+              parentMatched || challengeMatches
+            )
+          : [];
         let newNode = new ChallengeNode(node.challenge, children);
         this.treeControl.expandDescendants(newNode);
         return newNode;
@@ -108,8 +111,9 @@ export class ChallengesOverviewComponent {
   private challengeContains(challenge: Challenge, value: string): boolean {
     return (
       challenge.name.toLowerCase().includes(value) ||
-      challenge.description.toLowerCase().includes(value) ||
-      challenge.category.toLowerCase().includes(value)
+      (challenge.childrenIds.length == 0 &&
+        (challenge.description.toLowerCase().includes(value) ||
+          challenge.category.toLowerCase().includes(value)))
     );
   }
 
