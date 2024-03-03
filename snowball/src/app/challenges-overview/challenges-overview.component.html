@@ -1,12 +1,12 @@
 <mat-drawer-container>
   <div>
-    <div>
-      <mat-form-field subscriptSizing="dynamic" style="width: 100%">
+    <div style="display: inline-flex; align-items: center; width: 100%;">
+      <mat-form-field id="filterField" subscriptSizing="dynamic" style="max-width: 100%">
         <mat-label>Search challenge</mat-label>
         <input matInput placeholder="name/description/category.." (input)="updateFilter($event)" />
       </mat-form-field>
-      <a *ngIf="false" mat-flat-button (click)="drawer.toggle()">
-        Zaawansowane filtry
+      <a mat-flat-button class="standard" (click)="drawer.toggle()">
+        Advanced filters
       </a>
     </div>
     <mat-tree [dataSource]="filteredData" [treeControl]="treeControl">
@@ -27,7 +27,7 @@
         </div>
       </mat-tree-node>
       <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChildren">
-        <div class="mat-tree-node">
+        <div class="mat-tree-node" [class.excludeGroups]="!advancedFilters.includeGroups">
           <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.challenge.name">
             <mat-icon class="mat-icon-rtl-mirror">
               {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
@@ -38,13 +38,15 @@
           </a>
           <i>{{ node.challenge.currentLevel }}: {{ chUtils.getChallengeProgress(node.challenge) }}</i>
         </div>
-        <div [class.tree-invisible]="!treeControl.isExpanded(node)" role="group">
+        <div [class.tree-invisible]="!treeControl.isExpanded(node) && advancedFilters.includeGroups" role="group">
           <ng-container matTreeNodeOutlet></ng-container>
         </div>
       </mat-nested-tree-node>
     </mat-tree>
   </div>
-  <mat-drawer #drawer class="example-sidenav" mode="over" position="end">
-    <p>Auto-resizing sidenav</p>
+  <mat-drawer #drawer mode="over" position="end">
+    <mat-slide-toggle [checked]="advancedFilters.includeGroups" (toggleChange)="toggleGroups()">
+      include groups
+    </mat-slide-toggle>
   </mat-drawer>
 </mat-drawer-container>

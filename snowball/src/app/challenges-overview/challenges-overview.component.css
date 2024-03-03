@@ -11,6 +11,11 @@ mat-drawer-container {
   background-color: rgb(17, 94, 165);
 }
 
+mat-drawer {
+  padding: 15px;
+  background-color: #eee
+}
+
 mat-tree * {
   color: white;
   font-weight: 100;
@@ -20,6 +25,10 @@ mat-tree * {
 mat-tree mat-tree-node,
 mat-tree mat-tree-node * {
   background-color: rgb(17, 133, 175);
+}
+
+.mat-tree-node.excludeGroups {
+  display: none;
 }
 
 mat-nested-tree-node > mat-tree-node {
@@ -42,4 +51,16 @@ mat-tree-node + mat-tree-node {
 .ch-level + span {
   display: flex;
   flex-direction: row-reverse;
+}
+
+#filterField {
+  display: inline-flex;
+  margin-right: auto;
+  flex: 0 0 45%;
+}
+
+#filterField + a {
+  background-color: rgb(17, 133, 175);
+  color: white;
+  margin-right: 10px;
 }

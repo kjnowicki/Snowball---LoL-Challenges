@@ -7,7 +7,7 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-a {
+a:not(.standard) {
   background: none !important;
   font-weight: 400 !important;
   color: white !important;

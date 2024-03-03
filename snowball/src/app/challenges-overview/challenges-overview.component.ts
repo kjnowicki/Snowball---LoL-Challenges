@@ -1,12 +1,6 @@
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { CommonModule } from '@angular/common';
-import {
-  ApplicationRef,
-  Component,
-  EventEmitter,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { ApplicationRef, Component, EventEmitter, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCommonModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -14,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTreeModule, MatTreeNestedDataSource } from '@angular/material/tree';
 import { Challenge } from '../../model/challenge';
 import { ChallengesService } from '../services/challenges.service';
@@ -32,6 +27,7 @@ import { ChallengeUtils } from '../utils/challengeUtils';
     MatProgressBarModule,
     MatTreeModule,
     MatIconModule,
+    MatSlideToggleModule,
   ],
   templateUrl: './challenges-overview.component.html',
   styleUrl: './challenges-overview.component.css',
@@ -41,6 +37,10 @@ export class ChallengesOverviewComponent {
   filteredData = new MatTreeNestedDataSource<ChallengeNode>();
   allData: ChallengeNode[];
   treeControl = new NestedTreeControl<ChallengeNode>((node) => node.children);
+
+  advancedFilters = {
+    includeGroups: true
+  };
 
   @Output() challengeChosen = new EventEmitter<Challenge>();
 
@@ -56,6 +56,10 @@ export class ChallengesOverviewComponent {
       this.allData = this.getChallengesNodes();
       this.filteredData.data = this.allData;
     });
+  }
+
+  toggleGroups() {
+    this.advancedFilters.includeGroups = !this.advancedFilters.includeGroups;
   }
 
   updateFilter(event: Event) {
