@@ -22,9 +22,11 @@ export class ChallengeUtils {
 }
 
 export const additionalInfo: AdditionalInfo = {
-  skins: "Need a Bigger Closet"
+  skins: "Need a Bigger Closet",
+  mastery: "Catch 'em All"
 };
 
 interface AdditionalInfo {
   skins:string;
+  mastery:string;
 }

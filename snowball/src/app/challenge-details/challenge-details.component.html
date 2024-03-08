@@ -48,24 +48,32 @@
   </div>
   <div *ngIf="!isSubchallenge" class="details">
     <div>
-      @if(challenge?.name != specificInfo.skins){
-        <div *ngIf="getAvailableItems().length > 0">
-          <h3>Available {{challenge?.idListType?.toLowerCase()}}s:</h3>
-          <span>{{getAvailableItems().sort().join(", ")}}</span>
+      @switch (challenge?.name) {
+      @case (specificInfo.skins) {
+      <div>
+        <h3>Champions' skin count</h3>
+        <div *ngFor="let namesPerCount of skinsCounts">
+          <h4>{{namesPerCount.count}} skins</h4>
+          <span>{{namesPerCount.names.join(", ")}}</span>
         </div>
-        <div *ngIf="getCompletedItems().length > 0">
-          <h3>Completed {{challenge?.idListType?.toLowerCase()}}s:</h3>
-          <span>{{getCompletedItems().sort().join(", ")}}</span>
-        </div>
-      } @else {
-        <div>
-          <h3>Champions' skin count</h3>
-          <div *ngFor="let namesPerCount of skinsCounts">
-            <h4>{{namesPerCount.count}} skins</h4>
-            <span>{{namesPerCount.names.join(", ")}}</span>
-          </div>
-        </div>
+      </div>
       }
+      @case (specificInfo.mastery) {
+      <div>
+        <h3>Champions closest to mastery breakpoint:</h3>
+        <span>{{champUtils.champsNames(championsUnderMastery).join(", ")}}</span>
+      </div>
+      }
+      @default {
+      <div *ngIf="getAvailableItems().length > 0">
+        <h3>Available {{challenge?.idListType?.toLowerCase()}}s:</h3>
+        <span>{{getAvailableItems().sort().join(", ")}}</span>
+      </div>
+      <div *ngIf="getCompletedItems().length > 0">
+        <h3>Completed {{challenge?.idListType?.toLowerCase()}}s:</h3>
+        <span>{{getCompletedItems().sort().join(", ")}}</span>
+      </div>
+      } }
     </div>
     <div *ngIf="!isSubchallenge  && challenge?.childrenIds?.length">
       <h3>Sub-challenges:</h3>
@@ -80,11 +88,12 @@
     <div *ngIf="challenge?.friendsAtLevels?.length">
       <h3>Friends leaderboard:</h3>
       <div style="padding-left: 10px;">
-        @for (level of challenge?.friendsAtLevels?.reverse(); track level) {
-        <h4 mat-subheader [class.yourLevel]="level.level == challenge?.currentLevel">{{level.level}}{{level.level == challenge?.currentLevel ? " <<<" : ""}}</h4>
-        <span>{{this.getFriends(level)}} </span>
-        <mat-divider></mat-divider>
-        }
+        @for (level of challenge?.friendsAtLevels?.slice()?.reverse(); track level) {
+        <h4 mat-subheader [class.yourLevel]="level.level == challenge?.currentLevel">{{level.level}}{{level.level ==
+          challenge?.currentLevel ? " <<<" : "" }}</h4>
+            <span>{{this.getFriends(level)}} </span>
+            <mat-divider></mat-divider>
+            }
       </div>
     </div>
   </div>

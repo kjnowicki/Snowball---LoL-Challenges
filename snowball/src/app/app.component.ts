@@ -92,6 +92,7 @@ export class AppComponent {
     overwolf.games.launchers.onUpdated.addListener(() => {
       this.chService.updateChallenges();
       this.champsService.updateChampions();
+      this.champsService.updateChampionMastery();
     });
   }
 

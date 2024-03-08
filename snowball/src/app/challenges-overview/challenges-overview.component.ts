@@ -63,15 +63,13 @@ export class ChallengesOverviewComponent {
   }
 
   checkFilter() {
-    let filterValue = (document.getElementById("filterField") as HTMLInputElement)?.value ?? "";
-    this.filteredData.data = this.mapFilteredData(this.allData, filterValue);
-    if (filterValue == '') this.treeControl.collapseAll();
+    let filterValue = (document.getElementById("filterFieldInput") as HTMLInputElement)?.value ?? "";
+    if(filterValue.length) this.filteredData.data = this.mapFilteredData(this.allData, filterValue);
   }
 
   updateFilter(event: Event) {
     let filterValue = (event.target as HTMLInputElement).value;
     this.filteredData.data = this.mapFilteredData(this.allData, filterValue);
-    if (filterValue == '') this.treeControl.collapseAll();
   }
 
   mapFilteredData(
@@ -100,7 +98,7 @@ export class ChallengesOverviewComponent {
             )
           : [];
         let newNode = new ChallengeNode(node.challenge, children);
-        this.treeControl.expandDescendants(newNode);
+        if(filterValue.length) this.treeControl.expandDescendants(newNode);
         return newNode;
       });
   }

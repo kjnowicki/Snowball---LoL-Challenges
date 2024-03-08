@@ -3,7 +3,7 @@
     <div style="display: inline-flex; align-items: center; width: 100%;">
       <mat-form-field id="filterField" subscriptSizing="dynamic" style="max-width: 100%">
         <mat-label>Search challenge</mat-label>
-        <input matInput placeholder="name/description/category.." (input)="updateFilter($event)" />
+        <input  id="filterFieldInput" matInput placeholder="name/description/category.." (input)="updateFilter($event)" />
       </mat-form-field>
       <a mat-flat-button class="standard" (click)="drawer.toggle()">
         Advanced filters

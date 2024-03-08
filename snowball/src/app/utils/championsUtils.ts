@@ -1,5 +1,6 @@
 import { Champion } from '../../model/champion';
 import { LocalChampion } from '../../model/local.champion';
+import { ChampionMastery } from '../../model/mastery';
 import { LcuService } from '../services/lcu.service';
 
 export class ChampionsUtils {
@@ -25,5 +26,22 @@ export class ChampionsUtils {
         };
       })
       .sort((a, b) => (a.count < b.count ? 1 : -1));
+  }
+
+  public static getChampionsBelowMasteryThreshold(
+    championMastery: ChampionMastery[],
+    limit: number,
+    champions: Champion[]
+  ) {
+    return championMastery
+      .filter((m) => m.championPoints < limit)
+      .map((m) => {
+        return champions.find((ch) => ch.key == m.championId.toString());
+      })
+      .filter(m => m != undefined) as Champion[];
+  }
+
+  public static champsNames(champions: Champion[]) {
+    return champions.map(ch => ch.name);
   }
 }
