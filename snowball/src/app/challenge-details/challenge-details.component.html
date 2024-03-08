@@ -47,13 +47,25 @@
     <span>{{chUtils.getChallengeProgress(challenge!)}}</span>
   </div>
   <div *ngIf="!isSubchallenge" class="details">
-    <div *ngIf="getAvailableItems().length > 0">
-      <h3>Available {{challenge?.idListType?.toLowerCase()}}s:</h3>
-      <span>{{getAvailableItems().sort().join(", ")}}</span>
-    </div>
-    <div *ngIf="getCompletedItems().length > 0">
-      <h3>Completed {{challenge?.idListType?.toLowerCase()}}s:</h3>
-      <span>{{getCompletedItems().sort().join(", ")}}</span>
+    <div>
+      @if(challenge?.name != specificInfo.skins){
+        <div *ngIf="getAvailableItems().length > 0">
+          <h3>Available {{challenge?.idListType?.toLowerCase()}}s:</h3>
+          <span>{{getAvailableItems().sort().join(", ")}}</span>
+        </div>
+        <div *ngIf="getCompletedItems().length > 0">
+          <h3>Completed {{challenge?.idListType?.toLowerCase()}}s:</h3>
+          <span>{{getCompletedItems().sort().join(", ")}}</span>
+        </div>
+      } @else {
+        <div>
+          <h3>Champions' skin count</h3>
+          <div *ngFor="let namesPerCount of skinsCounts">
+            <h4>{{namesPerCount.count}} skins</h4>
+            <span>{{namesPerCount.names.join(", ")}}</span>
+          </div>
+        </div>
+      }
     </div>
     <div *ngIf="!isSubchallenge  && challenge?.childrenIds?.length">
       <h3>Sub-challenges:</h3>

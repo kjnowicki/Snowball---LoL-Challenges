@@ -13,10 +13,10 @@ export class LcuService {
   }> = new EventEmitter();
 
   constructor() {
-    this.getInfo();
+    this.updateInfo();
   }
 
-  getInfo() {
+  updateInfo() {
     overwolf.games.launchers.events.getInfo(
       10902,
       (result: overwolf.games.launchers.events.GetInfoResult) => {

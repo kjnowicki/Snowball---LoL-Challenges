@@ -11,7 +11,9 @@ import { ChallengesService } from '../services/challenges.service';
 import { ChallengeUtils } from '../utils/challengeUtils';
 import { FriendsService } from '../services/friends.service';
 import { Friend } from '../../model/friend';
-
+import { ChampionsUtils } from '../utils/championsUtils';
+import { additionalInfo } from '../utils/challengeUtils';
+import { ChampionsService } from '../services/champions.service';
 @Component({
   selector: 'challenge-details',
   standalone: true,
@@ -34,11 +36,21 @@ export class ChallengeDetailsComponent {
   @Output() subChallengeChosenEvent = new EventEmitter<Challenge>();
 
   chUtils = ChallengeUtils;
+  specificInfo = additionalInfo;
 
   champions: Champion[] = [];
+  skinsCounts: {count: number, names: string[]}[] = [];
 
-  constructor(private http: HttpClient, private chService: ChallengesService, private frService: FriendsService) {
+  constructor(private http: HttpClient, private chService: ChallengesService, private frService: FriendsService, public champsService: ChampionsService) {
     this.readChampionsFromJSON();
+    chService.challenges.subscribe(data => {
+      this.challenge = data.filter(dataCh => dataCh.id == this.challenge?.id).at(0);
+    });
+    
+    this.skinsCounts = ChampionsUtils.getSkinsCount(champsService.champions);
+    champsService.championsEvent.subscribe(data => {
+      this.skinsCounts = ChampionsUtils.getSkinsCount(data);
+    });
   }
 
   private readChampionsFromJSON() {

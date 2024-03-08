@@ -54,12 +54,18 @@ export class ChallengesOverviewComponent {
     this.filteredData.data = this.allData;
     chService.challenges.subscribe(() => {
       this.allData = this.getChallengesNodes();
-      this.filteredData.data = this.allData;
+      this.checkFilter();
     });
   }
 
   toggleGroups() {
     this.advancedFilters.includeGroups = !this.advancedFilters.includeGroups;
+  }
+
+  checkFilter() {
+    let filterValue = (document.getElementById("filterField") as HTMLInputElement)?.value ?? "";
+    this.filteredData.data = this.mapFilteredData(this.allData, filterValue);
+    if (filterValue == '') this.treeControl.collapseAll();
   }
 
   updateFilter(event: Event) {

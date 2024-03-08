@@ -6,6 +6,8 @@ import { ChallengeDetailsComponent } from './challenge-details/challenge-details
 import { Challenge } from '../model/challenge';
 import { ChallengesService } from './services/challenges.service';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { LcuService } from './services/lcu.service';
+import { ChampionsService } from './services/champions.service';
 
 @Component({
   selector: 'app-root',
@@ -40,7 +42,7 @@ export class AppComponent {
 
   chosenChallenge: Challenge | undefined;
 
-  constructor(private ref: ApplicationRef, private chService: ChallengesService) {
+  constructor(private ref: ApplicationRef, private chService: ChallengesService, private lcuService: LcuService, private champsService: ChampionsService) {
     setInterval(() => {
       ref.tick();
     }, 200);
@@ -57,6 +59,7 @@ export class AppComponent {
       overwolf.games.launchers.onLaunched.addListener((data) => {
         if (data.classId == 10902) {
           this.gameLaunched = true;
+          this.lcuService.updateInfo();
         }
       });
     });
@@ -88,6 +91,7 @@ export class AppComponent {
 
     overwolf.games.launchers.onUpdated.addListener(() => {
       this.chService.updateChallenges();
+      this.champsService.updateChampions();
     });
   }
 
