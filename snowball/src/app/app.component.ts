@@ -8,6 +8,8 @@ import { ChallengesService } from './services/challenges.service';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { LcuService } from './services/lcu.service';
 import { ChampionsService } from './services/champions.service';
+import { DataDragonService } from './services/data-dragon.service';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +19,7 @@ import { ChampionsService } from './services/champions.service';
     ChallengesOverviewComponent,
     ChallengeDetailsComponent,
     MatProgressBarModule,
+    HttpClientModule
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
@@ -42,15 +45,23 @@ export class AppComponent {
 
   chosenChallenge: Challenge | undefined;
 
-  constructor(private ref: ApplicationRef, private chService: ChallengesService, private lcuService: LcuService, private champsService: ChampionsService) {
+  constructor(
+    private ref: ApplicationRef,
+    private chService: ChallengesService,
+    private lcuService: LcuService,
+    private champsService: ChampionsService,
+    private http: HttpClient,
+    private ddService: DataDragonService
+  ) {
     setInterval(() => {
       ref.tick();
     }, 200);
 
-    chService.challenges.subscribe(() => this.dataLoaded = true);
+    ddService.setHttpClient(http).updateDD();
+    chService.challenges.subscribe(() => (this.dataLoaded = true));
 
     this.setOverwolfMechanisms();
-    
+
     overwolf.games.launchers.getRunningLaunchersInfo((data) => {
       if (data.launchers.filter((l) => l.classId == 10902).length > 0) {
       } else {
@@ -69,7 +80,7 @@ export class AppComponent {
     if (!window.location?.search?.includes('gamelaunchevent')) {
       this.desktopWindow.restore();
     }
-    overwolf.extensions.onAppLaunchTriggered.addListener(launchEvent => {
+    overwolf.extensions.onAppLaunchTriggered.addListener((launchEvent) => {
       this.desktopWindow.restore();
     });
 

@@ -23,7 +23,6 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/data",
               {"glob":"**/*","input":"src/overwolf/","output":"/"}
             ],
             "styles": [

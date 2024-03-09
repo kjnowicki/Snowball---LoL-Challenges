@@ -20,6 +20,8 @@ import { Friend } from '../../model/friend';
 import { ChampionsUtils } from '../utils/championsUtils';
 import { additionalInfo } from '../utils/challengeUtils';
 import { ChampionsService } from '../services/champions.service';
+import { DataDragonService } from '../services/data-dragon.service';
+
 @Component({
   selector: 'challenge-details',
   standalone: true,
@@ -45,7 +47,6 @@ export class ChallengeDetailsComponent implements AfterViewInit {
   champUtils = ChampionsUtils;
   specificInfo = additionalInfo;
 
-  champions: Champion[] = [];
   skinsCounts: { count: number; names: string[] }[] = [];
   championsUnderMastery: Champion[] = [];
 
@@ -53,9 +54,9 @@ export class ChallengeDetailsComponent implements AfterViewInit {
     private http: HttpClient,
     private chService: ChallengesService,
     private frService: FriendsService,
-    public champsService: ChampionsService
+    public champsService: ChampionsService,
+    private ddService: DataDragonService
   ) {
-    this.readChampionsFromJSON();
     chService.challenges.subscribe((data) => {
       this.challenge = data
         .filter((dataCh) => dataCh.id == this.challenge?.id)
@@ -84,29 +85,19 @@ export class ChallengeDetailsComponent implements AfterViewInit {
           ChampionsUtils.getChampionsBelowMasteryThreshold(
             this.champsService.championMastery,
             this.challenge.nextThreshold,
-            this.champions
+            this.ddService.champions
           );
         this.champsService.championsMasteryEvent.subscribe((data) => {
           this.championsUnderMastery =
             ChampionsUtils.getChampionsBelowMasteryThreshold(
               data,
               this.challenge?.nextThreshold ?? 0,
-              this.champions
+              this.ddService.champions
             );
         });
         break;
       }
     }
-  }
-
-  private readChampionsFromJSON() {
-    this.http.get<Champions>('data/champion.json').subscribe((data) => {
-      if (data) {
-        this.champions = Array.from(
-          new Map<string, Champion>(Object.entries(data.data)).values()
-        );
-      }
-    });
   }
 
   getFriend(friendId: string): Friend | undefined {
@@ -130,7 +121,7 @@ export class ChallengeDetailsComponent implements AfterViewInit {
           (id) => this.getChampionById(id.toString())?.name
         );
         if (available?.length == 0) {
-          available = this.champions
+          available = this.ddService.champions
             .filter((ch) => !completed?.includes(ch.name))
             .map((ch) => ch.name);
         }
@@ -155,7 +146,7 @@ export class ChallengeDetailsComponent implements AfterViewInit {
   }
 
   getChampionById(id: string) {
-    return this.champions.find((champion) => champion.key == id);
+    return this.ddService.champions.find((champion) => champion.key == id);
   }
 
   getSubChallenges(idList: number[]) {
