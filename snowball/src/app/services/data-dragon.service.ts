@@ -37,7 +37,7 @@ export class DataDragonService {
             .subscribe((versions) => {
               if (versions) {
                 this.version = versions.at(0) ?? '14.5.1';
-                if (exists) {
+                if (exists.found) {
                   overwolf.io.readFileContents(
                     overwolf.io.paths.localAppData +
                     this.localAppDataPath +
@@ -71,7 +71,7 @@ export class DataDragonService {
   private readFromDD(version: string) {
     this.http
       .get<Champions>(
-        `https://ddragon.leagueoflegends.com/cdn/${this.version}/data/en_US/champion.json`
+        `https://ddragon.leagueoflegends.com/cdn/${version}/data/en_US/champion.json`
       )
       .subscribe((data) => {
         if (data) {
