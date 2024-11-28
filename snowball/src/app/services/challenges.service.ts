@@ -6,7 +6,7 @@ import { LcuService } from './lcu.service';
   providedIn: 'root',
 })
 export class ChallengesService {
-  challengesCached: Challenge[] = [];
+  static challengesCached: Challenge[] = [];
 
   @Output() challenges: EventEmitter<Challenge[]> = new EventEmitter<
     Challenge[]
@@ -35,10 +35,10 @@ export class ChallengesService {
       (data) => {
         if (data.data) {
           let json = JSON.parse(data.data);
-          this.challengesCached = Array.from(
+          ChallengesService.challengesCached = Array.from(
             new Map<string, Challenge>(Object.entries(json)).values()
           );
-          this.challenges.emit(this.challengesCached);
+          this.challenges.emit(ChallengesService.challengesCached);
         }
       }
     );

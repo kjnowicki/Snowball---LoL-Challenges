@@ -150,13 +150,13 @@ export class ChallengeDetailsComponent implements AfterViewInit {
   }
 
   getSubChallenges(idList: number[]) {
-    return this.chService.challengesCached.filter((ch) =>
+    return ChallengesService.challengesCached.filter((ch) =>
       idList.includes(ch.id)
     );
   }
 
   chooseParentChallenge() {
-    this.challenge = this.chService.challengesCached
+    this.challenge = ChallengesService.challengesCached
       .filter((ch) => ch.id == this.challenge?.parentId)
       .at(0);
   }
