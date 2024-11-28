@@ -1,0 +1,14 @@
+<div class="wrapper">
+    <h1>Champion challenges: {{championChallenges.length}}</h1>
+    <h2>Currently affected:</h2>
+
+    <h2>Available champs:</h2>
+    <div>
+        <!-- @for (entry of champChallengesMap.entries(); track $index) {
+            <div>{{entry[0]}}: {{entry[1].length}}</div>
+        } -->
+        <div *ngFor="let chCh of champChallengesMap | keyvalue">
+            <span>{{chCh.key}}: {{chCh.value.length}}</span>
+        </div>
+    </div>
+</div>
