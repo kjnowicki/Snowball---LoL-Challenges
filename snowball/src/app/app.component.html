@@ -1,15 +1,16 @@
-<app-header></app-header>
-@if(dataLoaded){
-@switch (currentNavigationSwitch) {
-@case (navigationSwitch.START) {
+<app-header (clicked)="this.currentNavigationSwitch = navigationSwitch.START"
+    [currentWindowName]="currentWindow"></app-header>
+@if(dataLoaded){ @if (currentWindow == "Main") { @switch
+(currentNavigationSwitch) { @case (navigationSwitch.START) {
+<profile (navigate)="navigate($event)" (challengeChosen)="chooseChallengeEvent($event)"></profile>
+} @case (navigationSwitch.CH_OVERVIEW) {
 <challenges-overview (challengeChosen)="chooseChallengeEvent($event)"></challenges-overview>
-}
-@case (navigationSwitch.CH_DETAILS) {
+} @case (navigationSwitch.CH_DETAILS) {
 <challenge-details [challenge]="chosenChallenge"
-    (close)="this.currentNavigationSwitch = navigationSwitch.START"></challenge-details>
-}
-}
-} @else if(gameLaunched) {
+    (close)="this.currentNavigationSwitch = navigationSwitch.CH_OVERVIEW"></challenge-details>
+} } } @else {
+<champ-select [sessionData]="session!"></champ-select>
+} } @else if(gameLaunched) {
 <mat-progress-bar color="accent" mode="query"></mat-progress-bar>
 } @else {
 <h2 style="color: white; margin: 15px">

@@ -4,7 +4,7 @@
   "meta": {
     "name": "Snowball",
     "author": "Krzysztof Nowicki",
-    "version": "0.1",
+    "version": "0.2",
     "minimum-overwolf-version": "0.160.0",
     "description": "An app to help you progress with challenges in League of Legends",
     "dock_button_title": "Snowball",
@@ -53,14 +53,30 @@
         "transparent": true,
         "resizable": true,
         "use_os_windowing": true,
-        "override_on_update": true,
-                "size": {
+        "size": {
           "width": 1212,
           "height": 699
         },
         "min_size": {
           "width": 1212,
           "height": 699
+        }
+      },
+      "chSelect": {
+        "file": "index.html",
+        "background_optimization": true,
+        "desktop_only": true,
+        "native_window": true,
+        "transparent": true,
+        "resizable": true,
+        "use_os_windowing": true,
+        "size": {
+          "width": 1100,
+          "height": 600
+        },
+        "min_size": {
+          "width": 1100,
+          "height": 600
         }
       }
     },
