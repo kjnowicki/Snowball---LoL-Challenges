@@ -126,7 +126,7 @@ export class ChallengesOverviewComponent {
   }
 
   getChallengesNodes() {
-    let topChallenges = this.chService.challengesCached.filter(
+    let topChallenges = ChallengesService.challengesCached.filter(
       (ch) => ch.parentName == ''
     );
     return topChallenges.map((ch) => this.recursiveChallengeNode(ch));
@@ -135,7 +135,7 @@ export class ChallengesOverviewComponent {
   recursiveChallengeNode(challenge: Challenge): ChallengeNode {
     return new ChallengeNode(
       challenge,
-      this.chService.challengesCached
+      ChallengesService.challengesCached
         .filter((child) => child.parentId == challenge.id)
         .map((child) => this.recursiveChallengeNode(child))
     );

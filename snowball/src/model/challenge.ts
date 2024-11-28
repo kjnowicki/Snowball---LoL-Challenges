@@ -12,7 +12,7 @@ export interface Challenge {
     description: string;
     descriptionShort: string;
     friendsAtLevels: FriendsLevels[];
-    gameModes: [],
+    gameModes: string[],
     hasLeaderboard: boolean;
     iconPath: string;
     id: number,
