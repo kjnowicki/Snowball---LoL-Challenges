@@ -10,6 +10,10 @@ import { LcuService } from './services/lcu.service';
 import { ChampionsService } from './services/champions.service';
 import { DataDragonService } from './services/data-dragon.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { ProfileComponent } from './profile/profile.component';
+import { ChampSelectService } from './services/champ.select.service';
+import { ChampSelectSession } from '../model/session';
+import { ChampSelectComponent } from './champ-select/champ-select.component';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +23,9 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
     ChallengesOverviewComponent,
     ChallengeDetailsComponent,
     MatProgressBarModule,
-    HttpClientModule
+    HttpClientModule,
+    ProfileComponent,
+    ChampSelectComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
@@ -27,9 +33,12 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 export class AppComponent {
   desktopWindow = new OWWindow('Main');
   mainWindow = new OWWindow('bg');
+  champSelectWindow = new OWWindow('chSelect');
+  currentWindow: string = "";
   title = 'snowball';
   dataLoaded = false;
   gameLaunched = true;
+  session: ChampSelectSession | undefined = undefined;
 
   trayMenu = {
     menu_items: [
@@ -51,12 +60,16 @@ export class AppComponent {
     private lcuService: LcuService,
     private champsService: ChampionsService,
     private http: HttpClient,
-    private ddService: DataDragonService
+    private ddService: DataDragonService,
+    private chSelect: ChampSelectService
   ) {
     setInterval(() => {
       ref.tick();
     }, 200);
 
+    overwolf.windows.getCurrentWindow(win => {
+      this.currentWindow = win.window.name;
+    });
     ddService.setHttpClient(http).updateDD();
     chService.challenges.subscribe(() => (this.dataLoaded = true));
 
@@ -105,15 +118,40 @@ export class AppComponent {
       this.champsService.updateChampions();
       this.champsService.updateChampionMastery();
     });
+    setInterval(() => {
+      this.chSelect.getSessionIfPresent();
+    }, 1500);
+
+    this.chSelect.champSelectSession.subscribe(session => {
+      this.session = session;
+      if(session == undefined) {
+        this.champSelectWindow.getWindowState().then(state => {
+          if(state.window_state_ex != overwolf.windows.enums.WindowStateEx.closed) {
+            this.champSelectWindow.close(); 
+          }
+        });
+      } else {
+        this.champSelectWindow.getWindowState().then(state => {
+          if(state.window_state_ex == overwolf.windows.enums.WindowStateEx.closed) {
+            this.champSelectWindow.restore(); 
+          }
+        });
+      }
+    });
   }
 
   chooseChallengeEvent(challenge: Challenge) {
     this.chosenChallenge = challenge;
     this.currentNavigationSwitch = NavigationSwitch.CH_DETAILS;
   }
+
+  navigate(navigationSwitch: NavigationSwitch) {
+    this.currentNavigationSwitch = navigationSwitch;
+  }
 }
 
 export enum NavigationSwitch {
   START,
+  CH_OVERVIEW,
   CH_DETAILS,
 }

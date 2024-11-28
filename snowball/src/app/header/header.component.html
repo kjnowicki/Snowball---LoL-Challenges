@@ -1,8 +1,10 @@
 <mat-toolbar mat-sticky id="header" class="app-header">
-  <img src="./desktop-icon.ico" style="height: 32px; margin-right: 10px;">
-  <span>Snowball</span>
-  <i style="margin-left: 4px;">- League Challenges</i>
-  <span class="spacer" style="flex: 1 1 auto;"></span>
+  <div style="display: inline-flex; flex:auto; align-items: center; cursor: pointer;" (click)="this.clicked.emit()">
+    <img src="./desktop-icon.ico" style="height: 32px; margin-right: 10px;">
+    <span>Snowball</span>
+    <i style="margin-left: 4px;">- League Challenges</i>
+    <span class="spacer" style="flex: 1 1 auto;"></span>
+  </div>
   <button mat-icon-button id="minimizeButton">
     <mat-icon>minimize</mat-icon>
   </button>

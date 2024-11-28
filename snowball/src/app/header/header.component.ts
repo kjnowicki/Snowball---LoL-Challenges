@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
 import { OWWindow } from '@overwolf/overwolf-api-ts/dist';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
@@ -11,8 +11,12 @@ import {MatButtonModule} from '@angular/material/button';
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
-export class HeaderComponent implements AfterViewInit{
-  currentWindow = new OWWindow("Main");
+export class HeaderComponent implements OnChanges {
+  @Output() clicked = new EventEmitter();
+  @Input() currentWindowName: string = "";
+
+  currentWindow: OWWindow = {} as OWWindow;
+
   maximized: boolean = false;
 
   header!: HTMLElement;
@@ -20,7 +24,8 @@ export class HeaderComponent implements AfterViewInit{
   maximize!: HTMLElement;
   minimize!: HTMLElement;
 
-  ngAfterViewInit(): void {
+  ngOnChanges(): void {
+    this.currentWindow = new OWWindow(this.currentWindowName);
     this.header = document.getElementById("header")!;
     this.close = document.getElementById("closeButton")!;
     this.maximize = document.getElementById("maximizeButton")!;
