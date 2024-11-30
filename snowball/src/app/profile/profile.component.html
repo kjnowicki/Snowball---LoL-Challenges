@@ -3,10 +3,19 @@
     Challenger: <b>{{ profileName }}</b>
   </h1>
   <mat-divider></mat-divider>
-  <button mat-button (click)="goToChallenges()">Full challenges view</button>
+  <a
+    mat-flat-button
+    class="standard"
+    style="color: black"
+    (click)="goToChallenges()"
+    >Full challenges view</a
+  >
   <div>
     <h3>Next closest goals:</h3>
-    <mat-checkbox [(ngModel)]="showPointless" (change)="updateData()"
+    <mat-checkbox
+      [(ngModel)]="showPointless"
+      (change)="updateData()"
+      color="accent"
       >Show "pointless" challenges</mat-checkbox
     >
     <table
@@ -60,6 +69,7 @@
       [pageSizeOptions]="[5, 10, 20]"
       showFirstLastButtons
       aria-label="Select page of challenges"
+      [color]="'accent'"
     >
     </mat-paginator>
   </div>

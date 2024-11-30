@@ -5,3 +5,27 @@ h1 {
 .wrapper {
     padding-inline: 2%;
 }
+
+::ng-deep .wrapper *:not(a > span) {
+    color: white;
+}
+
+::ng-deep a > span {
+    font-weight: bold;
+}
+
+table {
+    background-color: rgb(17, 133, 175);
+    border: 3px white solid;
+    border-bottom: 0;
+}
+
+mat-paginator {
+    background-color: rgb(17, 133, 175);
+    border: 3px white solid;
+    border-top: 0;
+}
+
+::ng-deep button:not([disabled]) svg {
+    fill: unset !important;
+}
