@@ -6,6 +6,10 @@ import { LcuService } from '../services/lcu.service';
 export class ChampionsUtils {
   constructor() {}
 
+  public static getChampionById(champions: Champion[], key: number): Champion | undefined {
+    return champions.find(ch => ch.key == key.toString());
+  }
+
   public static getSkinsCount(champions: LocalChampion[]) {
     if (champions == undefined) return [];
     let nameToCount = champions.slice(1).map((ch) => {

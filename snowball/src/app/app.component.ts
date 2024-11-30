@@ -25,7 +25,7 @@ import { ChampSelectComponent } from './champ-select/champ-select.component';
     MatProgressBarModule,
     HttpClientModule,
     ProfileComponent,
-    ChampSelectComponent
+    ChampSelectComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
@@ -34,7 +34,7 @@ export class AppComponent {
   desktopWindow = new OWWindow('Main');
   mainWindow = new OWWindow('bg');
   champSelectWindow = new OWWindow('chSelect');
-  currentWindow: string = "";
+  currentWindow: string = '';
   title = 'snowball';
   dataLoaded = false;
   gameLaunched = true;
@@ -67,7 +67,7 @@ export class AppComponent {
       ref.tick();
     }, 200);
 
-    overwolf.windows.getCurrentWindow(win => {
+    overwolf.windows.getCurrentWindow((win) => {
       this.currentWindow = win.window.name;
     });
     ddService.setHttpClient(http).updateDD();
@@ -120,20 +120,28 @@ export class AppComponent {
     });
     setInterval(() => {
       this.chSelect.getSessionIfPresent();
-    }, 1500);
+    }, 1500); 
 
-    this.chSelect.champSelectSession.subscribe(session => {
+    this.chSelect.champSelectSession.subscribe((session) => {
       this.session = session;
-      if(session == undefined) {
-        this.champSelectWindow.getWindowState().then(state => {
-          if(state.window_state_ex != overwolf.windows.enums.WindowStateEx.closed) {
-            this.champSelectWindow.close(); 
+      if (session == undefined) {
+        this.champSelectWindow.getWindowState().then((state) => {
+          if (
+            state.window_state_ex != overwolf.windows.enums.WindowStateEx.closed &&
+            state.window_state_ex != overwolf.windows.enums.WindowStateEx.minimized
+          ) {
+            this.champSelectWindow.close();
+            this.mainWindow.restore();
           }
         });
       } else {
-        this.champSelectWindow.getWindowState().then(state => {
-          if(state.window_state_ex == overwolf.windows.enums.WindowStateEx.closed) {
-            this.champSelectWindow.restore(); 
+        this.champSelectWindow.getWindowState().then((state) => {
+        console.log(state.window_state_ex);
+          if (
+            state.window_state_ex == overwolf.windows.enums.WindowStateEx.closed
+          ) {
+            this.champSelectWindow.restore();
+            this.mainWindow.hide();
           }
         });
       }

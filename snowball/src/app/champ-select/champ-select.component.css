@@ -1,0 +1,6 @@
+.table-wrapper {
+    width: 95vw;
+    overflow-x: scroll;
+    height: 70vh;
+    overflow-y: scroll;
+}

@@ -33,14 +33,16 @@ export class ChampSelectService {
       (data) => {
         if (data.data) {
           let json = JSON.parse(data.data);
-          if(!json.actions && this.session != undefined) {
-            this.champSelectSession.emit(undefined);
+          if (!json.actions && this.session != undefined) {
+            this.session = undefined;
+            this.champSelectSession.emit(this.session);
           } else {
             this.session = json;
             this.champSelectSession.emit(this.session);
           }
-        } else if(this.session != undefined) {
-          this.champSelectSession.emit(undefined);
+        } else if (this.session != undefined) {
+          this.session = undefined;
+          this.champSelectSession.emit(this.session);
         }
       }
     );
