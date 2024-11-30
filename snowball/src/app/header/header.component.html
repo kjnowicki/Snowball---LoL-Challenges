@@ -8,10 +8,12 @@
   <button mat-icon-button id="minimizeButton">
     <mat-icon>minimize</mat-icon>
   </button>
-  <button mat-icon-button id="maximizeButton">
-    <mat-icon>maximize</mat-icon>
-  </button>
-  <button mat-icon-button id="closeButton">
-    <mat-icon>close</mat-icon>
-  </button>
+  @if (!isChampSelectWindow()) {
+    <button mat-icon-button id="maximizeButton">
+      <mat-icon>maximize</mat-icon>
+    </button>
+    <button mat-icon-button id="closeButton">
+      <mat-icon>close</mat-icon>
+    </button>
+  }
 </mat-toolbar>

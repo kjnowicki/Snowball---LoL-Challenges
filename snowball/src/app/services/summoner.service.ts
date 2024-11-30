@@ -6,7 +6,7 @@ import { Summoner } from '../../model/summoner';
   providedIn: 'root',
 })
 export class SummonerService {
-  summoner: Summoner | undefined;
+  static summoner: Summoner | undefined;
 
   @Output() summonerEvent: EventEmitter<Summoner> = new EventEmitter();
 
@@ -33,8 +33,8 @@ export class SummonerService {
       '',
       (data) => {
         if (data.data) {
-          this.summoner = JSON.parse(data.data);
-          this.summonerEvent.emit(this.summoner);
+          SummonerService.summoner = JSON.parse(data.data);
+          this.summonerEvent.emit(SummonerService.summoner);
         }
       }
     );

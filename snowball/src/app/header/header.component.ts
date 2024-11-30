@@ -26,20 +26,23 @@ export class HeaderComponent implements OnChanges {
 
   ngOnChanges(): void {
     this.currentWindow = new OWWindow(this.currentWindowName);
+  
     this.header = document.getElementById("header")!;
-    this.close = document.getElementById("closeButton")!;
-    this.maximize = document.getElementById("maximizeButton")!;
-    this.minimize = document.getElementById("minimizeButton")!;
-
     this.currentWindow.dragMove(this.header);
-    this.close.addEventListener('click', () => {
-      this.currentWindow.hide();
-    });
 
+    this.minimize = document.getElementById("minimizeButton")!;
     this.minimize.addEventListener('click', () => {
       this.currentWindow.minimize();
     });
 
+    if(this.isChampSelectWindow()) return;
+
+    this.close = document.getElementById("closeButton")!;
+    this.close.addEventListener('click', () => {
+      this.currentWindow.hide();
+    });
+
+    this.maximize = document.getElementById("maximizeButton")!;
     this.maximize.addEventListener('click', () => {
       if (!this.maximized) {
         this.currentWindow.maximize();
@@ -49,6 +52,10 @@ export class HeaderComponent implements OnChanges {
 
       this.maximized = !this.maximized;
     });
+  }
+
+  isChampSelectWindow() {
+    return this.currentWindowName == "chSelect";
   }
 
   constructor() {

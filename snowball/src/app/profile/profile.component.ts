@@ -57,7 +57,7 @@ export class ProfileComponent implements AfterViewInit {
     private challengesService: ChallengesService,
     private _liveAnnouncer: LiveAnnouncer
   ) {
-    this.profileName = summonerService.summoner?.displayName ?? '...';
+    this.profileName = SummonerService.summoner?.displayName ?? '...';
     this.updateData();
 
     challengesService.challenges.subscribe(data => {

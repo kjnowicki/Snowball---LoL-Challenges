@@ -26,7 +26,7 @@ export class ChampionsService {
   }
 
   public updateChampions() {
-    let url: string = `https://127.0.0.1:${this.lcuService.port}/lol-champions/v1/inventories/${this.sumSurvice.summoner?.summonerId}/champions`;
+    let url: string = `https://127.0.0.1:${this.lcuService.port}/lol-champions/v1/inventories/${SummonerService.summoner?.summonerId}/champions`;
     const headers: overwolf.web.FetchHeader[] = [];
     headers.push({ key: 'Accept', value: '*/*' });
     headers.push({ key: 'Accept-Encoding', value: 'gzip, deflate, br' });
@@ -50,7 +50,7 @@ export class ChampionsService {
   }
 
   public updateChampionMastery() {
-    let url: string = `https://127.0.0.1:${this.lcuService.port}/lol-collections/v1/inventories/${this.sumSurvice.summoner?.summonerId}/champion-mastery`;
+    let url: string = `https://127.0.0.1:${this.lcuService.port}/lol-collections/v1/inventories/${SummonerService.summoner?.summonerId}/champion-mastery`;
     const headers: overwolf.web.FetchHeader[] = [];
     headers.push({ key: 'Accept', value: '*/*' });
     headers.push({ key: 'Accept-Encoding', value: 'gzip, deflate, br' });

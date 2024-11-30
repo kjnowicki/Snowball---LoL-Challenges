@@ -18,3 +18,7 @@ a:hover,
 button:hover mat-icon {
   color: orange !important;
 }
+
+.wrapper {
+  margin-inline: 2%;
+}
