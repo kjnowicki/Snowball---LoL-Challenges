@@ -11,11 +11,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { SummonerService } from '../services/summoner.service';
 
 @Component({
-  selector: 'champ-select',
-  standalone: true,
-  imports: [CommonModule, MatTableModule, MatIconModule],
-  templateUrl: './champ-select.component.html',
-  styleUrl: './champ-select.component.css',
+    selector: 'champ-select',
+    imports: [CommonModule, MatTableModule, MatIconModule],
+    templateUrl: './champ-select.component.html',
+    styleUrl: './champ-select.component.css'
 })
 export class ChampSelectComponent implements OnChanges {
   championChallenges: Challenge[] = [];

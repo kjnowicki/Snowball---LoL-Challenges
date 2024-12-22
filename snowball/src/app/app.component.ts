@@ -16,18 +16,17 @@ import { ChampSelectSession } from '../model/session';
 import { ChampSelectComponent } from './champ-select/champ-select.component';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [
-    HeaderComponent,
-    ChallengesOverviewComponent,
-    ChallengeDetailsComponent,
-    MatProgressBarModule,
-    ProfileComponent,
-    ChampSelectComponent,
-  ],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
+    selector: 'app-root',
+    imports: [
+        HeaderComponent,
+        ChallengesOverviewComponent,
+        ChallengeDetailsComponent,
+        MatProgressBarModule,
+        ProfileComponent,
+        ChampSelectComponent,
+    ],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.css'
 })
 export class AppComponent {
   desktopWindow = new OWWindow('Main');
