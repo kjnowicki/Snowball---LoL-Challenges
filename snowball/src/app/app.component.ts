@@ -9,7 +9,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { LcuService } from './services/lcu.service';
 import { ChampionsService } from './services/champions.service';
 import { DataDragonService } from './services/data-dragon.service';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { ProfileComponent } from './profile/profile.component';
 import { ChampSelectService } from './services/champ.select.service';
 import { ChampSelectSession } from '../model/session';
@@ -23,7 +23,6 @@ import { ChampSelectComponent } from './champ-select/champ-select.component';
     ChallengesOverviewComponent,
     ChallengeDetailsComponent,
     MatProgressBarModule,
-    HttpClientModule,
     ProfileComponent,
     ChampSelectComponent,
   ],
