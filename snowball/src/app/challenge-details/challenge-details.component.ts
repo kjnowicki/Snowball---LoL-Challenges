@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {
   AfterViewInit,
   Component,
@@ -30,7 +30,6 @@ import { DataDragonService } from '../services/data-dragon.service';
     MatButtonModule,
     CommonModule,
     MatDividerModule,
-    HttpClientModule,
     MatListModule,
   ],
   templateUrl: './challenge-details.component.html',
