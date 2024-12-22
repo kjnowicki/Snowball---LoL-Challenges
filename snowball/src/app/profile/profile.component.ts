@@ -53,9 +53,7 @@ export class ProfileComponent implements AfterViewInit {
   chUtil = ChallengeUtils;
 
   constructor(
-    summonerService: SummonerService,
-    private challengesService: ChallengesService,
-    private _liveAnnouncer: LiveAnnouncer
+    challengesService: ChallengesService
   ) {
     this.profileName = SummonerService.summoner?.displayName ?? '...';
     this.updateData();
@@ -101,11 +99,6 @@ export class ProfileComponent implements AfterViewInit {
   }
 
   announceSortChange(sortState: Sort) {
-    if (sortState.direction) {
-      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
-    } else {
-      this._liveAnnouncer.announce('Sorting cleared');
-    }
   }
 }
 

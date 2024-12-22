@@ -3,38 +3,21 @@
     Challenger: <b>{{ profileName }}</b>
   </h1>
   <mat-divider></mat-divider>
-  <a
-    mat-flat-button
-    class="standard"
-    style="color: black"
-    (click)="goToChallenges()"
-    >Full challenges view</a
-  >
+  <a mat-flat-button class="standard" style="color: black" (click)="goToChallenges()">Go to full challenges list
+  </a>
   <div>
     <h3>Next closest goals:</h3>
-    <mat-checkbox
-      [(ngModel)]="showPointless"
-      (change)="updateData()"
-      color="accent"
-      >Show "pointless" challenges</mat-checkbox
-    >
-    <table
-      mat-table
-      [dataSource]="chDataSource"
-      matSort
-      (matSortChange)="announceSortChange($event)"
-    >
+    <mat-checkbox [(ngModel)]="showPointless" (change)="updateData()" color="primary">
+      <span style="color: white;">
+        Show "pointless" challenges
+      </span>
+    </mat-checkbox>
+    <table mat-table [dataSource]="chDataSource" matSort (matSortChange)="announceSortChange($event)">
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef>Name</th>
         <td mat-cell *matCellDef="let element">
-          <a
-            mat-flat-button
-            (click)="this.challengeChosen.emit(element.chRef)"
-            class="standard"
-            style="color: black"
-            [matTooltip]="element.description"
-            matTooltipPosition="after"
-          >
+          <a mat-flat-button (click)="this.challengeChosen.emit(element.chRef)" class="standard" style="color: black"
+            [matTooltip]="element.description" matTooltipPosition="after">
             {{ element.name }}
           </a>
         </td>
@@ -65,12 +48,7 @@
       <tr mat-row *matRowDef="let row; columns: chDisplayedColumns"></tr>
     </table>
 
-    <mat-paginator
-      [pageSizeOptions]="[5, 10, 20]"
-      showFirstLastButtons
-      aria-label="Select page of challenges"
-      [color]="'accent'"
-    >
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of challenges">
     </mat-paginator>
   </div>
 </div>
