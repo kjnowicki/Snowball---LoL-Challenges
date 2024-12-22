@@ -3,20 +3,21 @@ body {
   height: 100%;
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  color: white;
+  color: #ececef;
   font-weight: 100;
-  background-color: rgb(17, 94, 165);
+  background-color: rgb(48, 48, 48);
+  overflow-x: hidden;
 }
 
 a:not(.standard) {
   background: none !important;
   font-weight: 400 !important;
-  color: white !important;
+  color: #ececef !important;
 }
 
 a:hover,
 button:hover mat-icon {
-  color: orange !important;
+  color: darkorange !important;
 }
 
 .wrapper {

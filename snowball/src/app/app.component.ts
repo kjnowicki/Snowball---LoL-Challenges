@@ -136,9 +136,9 @@ export class AppComponent {
         });
       } else {
         this.champSelectWindow.getWindowState().then((state) => {
-        console.log(state.window_state_ex);
           if (
-            state.window_state_ex == overwolf.windows.enums.WindowStateEx.closed
+            state.window_state_ex == overwolf.windows.enums.WindowStateEx.closed || 
+            state.window_state_ex == overwolf.windows.enums.WindowStateEx.hidden
           ) {
             this.champSelectWindow.restore();
             this.mainWindow.hide();

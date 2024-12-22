@@ -31,19 +31,19 @@ export class HeaderComponent implements OnChanges {
     this.currentWindow.dragMove(this.header);
 
     this.minimize = document.getElementById("minimizeButton")!;
-    this.minimize.addEventListener('click', () => {
+    this.minimize?.addEventListener('click', () => {
       this.currentWindow.minimize();
     });
 
     if(this.isChampSelectWindow()) return;
 
     this.close = document.getElementById("closeButton")!;
-    this.close.addEventListener('click', () => {
+    this.close?.addEventListener('click', () => {
       this.currentWindow.hide();
     });
 
     this.maximize = document.getElementById("maximizeButton")!;
-    this.maximize.addEventListener('click', () => {
+    this.maximize?.addEventListener('click', () => {
       if (!this.maximized) {
         this.currentWindow.maximize();
       } else {

@@ -1,4 +1,4 @@
-h1 {
+h1, h3 {
     color: white;
 }
 
@@ -6,8 +6,8 @@ h1 {
     padding-inline: 2%;
 }
 
-::ng-deep .wrapper *:not(a > span) {
-    color: white;
+::ng-deep .wrapper *:not(a > span, h1, h3) {
+    color: #c9c9c9;
 }
 
 ::ng-deep a > span {
@@ -15,15 +15,11 @@ h1 {
 }
 
 table {
-    background-color: rgb(17, 133, 175);
-    border: 3px white solid;
-    border-bottom: 0;
+    background-color: #09090e;
 }
 
 mat-paginator {
-    background-color: rgb(17, 133, 175);
-    border: 3px white solid;
-    border-top: 0;
+    background-color: #202020;
 }
 
 ::ng-deep button:not([disabled]) svg {
