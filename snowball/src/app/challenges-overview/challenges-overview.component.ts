@@ -15,22 +15,21 @@ import { ChallengesService } from '../services/challenges.service';
 import { ChallengeUtils } from '../utils/challengeUtils';
 
 @Component({
-  selector: 'challenges-overview',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatCommonModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatSidenavModule,
-    MatButtonModule,
-    MatProgressBarModule,
-    MatTreeModule,
-    MatIconModule,
-    MatSlideToggleModule,
-  ],
-  templateUrl: './challenges-overview.component.html',
-  styleUrl: './challenges-overview.component.css',
+    selector: 'challenges-overview',
+    imports: [
+        CommonModule,
+        MatCommonModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatSidenavModule,
+        MatButtonModule,
+        MatProgressBarModule,
+        MatTreeModule,
+        MatIconModule,
+        MatSlideToggleModule,
+    ],
+    templateUrl: './challenges-overview.component.html',
+    styleUrl: './challenges-overview.component.css'
 })
 export class ChallengesOverviewComponent {
   displayedColumns: string[] = ['name', 'description', 'level', 'category'];

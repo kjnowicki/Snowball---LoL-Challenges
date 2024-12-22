@@ -22,20 +22,19 @@ import { FormsModule } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
-  selector: 'profile',
-  standalone: true,
-  imports: [
-    MatDividerModule,
-    MatButtonModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatSortModule,
-    MatCheckboxModule,
-    FormsModule,
-    MatTooltipModule
-  ],
-  templateUrl: './profile.component.html',
-  styleUrl: './profile.component.css',
+    selector: 'profile',
+    imports: [
+        MatDividerModule,
+        MatButtonModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatSortModule,
+        MatCheckboxModule,
+        FormsModule,
+        MatTooltipModule
+    ],
+    templateUrl: './profile.component.html',
+    styleUrl: './profile.component.css'
 })
 export class ProfileComponent implements AfterViewInit {
   @Output() navigate = new EventEmitter<NavigationSwitch>();

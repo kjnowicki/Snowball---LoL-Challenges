@@ -23,17 +23,16 @@ import { ChampionsService } from '../services/champions.service';
 import { DataDragonService } from '../services/data-dragon.service';
 
 @Component({
-  selector: 'challenge-details',
-  standalone: true,
-  imports: [
-    MatIconModule,
-    MatButtonModule,
-    CommonModule,
-    MatDividerModule,
-    MatListModule,
-  ],
-  templateUrl: './challenge-details.component.html',
-  styleUrl: './challenge-details.component.css',
+    selector: 'challenge-details',
+    imports: [
+        MatIconModule,
+        MatButtonModule,
+        CommonModule,
+        MatDividerModule,
+        MatListModule,
+    ],
+    templateUrl: './challenge-details.component.html',
+    styleUrl: './challenge-details.component.css'
 })
 export class ChallengeDetailsComponent implements AfterViewInit {
   @Input() challenge: Challenge | undefined;
