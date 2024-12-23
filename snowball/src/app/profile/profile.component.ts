@@ -15,7 +15,6 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, Sort, MatSortModule } from '@angular/material/sort';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { Challenge } from '../../model/challenge';
-import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { ChallengeUtils } from '../utils/challengeUtils';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms';
