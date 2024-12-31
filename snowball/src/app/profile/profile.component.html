@@ -3,7 +3,8 @@
     Challenger: <b>{{ profileName }}</b>
   </h1>
   <mat-divider></mat-divider>
-  <a mat-flat-button class="standard" style="color: black" (click)="goToChallenges()">Go to full challenges list
+  <a aria-disabled="true" mat-flat-button class="standard" style="color: black" (click)="goToChallenges()"
+    (keyup)="goToChallenges()">Go to full challenges list
   </a>
   <div>
     <h3>Next closest goals:</h3>
@@ -16,7 +17,8 @@
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef>Name</th>
         <td mat-cell *matCellDef="let element">
-          <a mat-flat-button (click)="this.challengeChosen.emit(element.chRef)" class="standard" style="color: black"
+          <a role="button" aria-disabled="true" mat-flat-button (click)="this.challengeChosen.emit(element.chRef)"
+            (keyup)="this.challengeChosen.emit(element.chRef)" class="standard" style="color: black"
             [matTooltip]="element.description" matTooltipPosition="after">
             {{ element.name }}
           </a>

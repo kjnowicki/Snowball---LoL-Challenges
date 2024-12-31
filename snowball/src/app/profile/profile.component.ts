@@ -72,8 +72,8 @@ export class ProfileComponent implements AfterViewInit {
 
   mapChallenges(challenges: Challenge[]): ChallengeSummary[] {
     return challenges.filter(ch => ch.nextLevel != "" && !ch.childrenIds.length).map(ch => {
-      let progress = this.getProgress(ch);
-      let ptg = this.chUtil.getNextPointsReward(ch);
+      const progress = this.getProgress(ch);
+      const ptg = this.chUtil.getNextPointsReward(ch);
       return {
         chRef: ch,
         name: ch.name,
@@ -92,8 +92,7 @@ export class ProfileComponent implements AfterViewInit {
 
   getProgress(challenge: Challenge) {
     if (challenge.nextThreshold <= 0) return 100;
-    let progress = challenge.currentValue / challenge.nextThreshold;
-    return progress;
+    return challenge.currentValue / challenge.nextThreshold;
   }
 
   announceSortChange(sortState: Sort) {
