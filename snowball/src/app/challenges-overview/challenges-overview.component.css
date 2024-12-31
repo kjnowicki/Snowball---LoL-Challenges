@@ -8,7 +8,7 @@ mat-tree .mat-nested-tree-node div[role=group] {
 
 mat-drawer-container {
   height: calc(100vh - 64px);
-  background-color: rgb(17, 94, 165);
+  background-color: rgb(48, 48, 48);;
 }
 
 mat-drawer {
@@ -19,12 +19,12 @@ mat-drawer {
 mat-tree * {
   color: white;
   font-weight: 100;
-  background-color: rgb(17, 94, 165);
+  background-color: #09090e;
 }
 
 mat-tree mat-tree-node,
 mat-tree mat-tree-node * {
-  background-color: rgb(17, 133, 175);
+  background-color: #202020;
 }
 
 .mat-tree-node.excludeGroups {
