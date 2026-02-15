@@ -50,7 +50,7 @@ export class ChampionsService {
   }
 
   public updateChampionMastery() {
-    let url: string = `https://127.0.0.1:${this.lcuService.port}/lol-collections/v1/inventories/${SummonerService.summoner?.summonerId}/champion-mastery`;
+    let url: string = `https://127.0.0.1:${this.lcuService.port}/lol-champion-mastery/v1/${SummonerService.summoner?.summonerId}/champion-mastery`;
     const headers: overwolf.web.FetchHeader[] = [];
     headers.push({ key: 'Accept', value: '*/*' });
     headers.push({ key: 'Accept-Encoding', value: 'gzip, deflate, br' });

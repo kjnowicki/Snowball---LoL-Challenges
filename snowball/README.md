@@ -25,3 +25,20 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+
+## Hot to debug locally
+Getting your local client port and secret
+`wmic PROCESS WHERE name='LeagueClientUx.exe' GET commandline`
+(or `ps -A | grep LeagueClientUx` on Mac)
+
+Look for endpoint to explore via [LCU swagger](https://swagger.dysolix.dev/lcu)
+
+You can find endpoints currently used in the project in methods of scripts in `services` folder
+
+## Release local instance to Overwolf
+1. Go into Overwolfs Settings -> About -> Development options
+2. Use "Load unpacked" and choose built app folder - `dist/snowball/browser`
+
+You can then use your local League Client to debug the app.
+If you need logs use `console.log()` and in the same dev options view in Overwolf you will see under Snowball app "Inspect" options - usually "Main" is the one you want to inspect.

@@ -53,7 +53,7 @@ export class ProfileComponent implements AfterViewInit {
   constructor(
     challengesService: ChallengesService
   ) {
-    this.profileName = SummonerService.summoner?.displayName ?? '...';
+    this.profileName = SummonerService.summoner?.gameName ?? '...';
     this.updateData();
 
     challengesService.challenges.subscribe(data => {
@@ -78,7 +78,7 @@ export class ProfileComponent implements AfterViewInit {
         chRef: ch,
         name: ch.name,
         description: ch.description,
-        progress: progress,
+        progress: `${(progress * 100).toFixed(2)}% (${this.getProgressText(ch)})`,
         ptg: ptg,
         nextLevel: ch.nextLevel,
         prio: progress * ptg
@@ -95,6 +95,10 @@ export class ProfileComponent implements AfterViewInit {
     return challenge.currentValue / challenge.nextThreshold;
   }
 
+  getProgressText(challenge: Challenge) {
+    return (challenge.nextThreshold <= 0) ? "100" : `${challenge.currentValue} / ${challenge.nextThreshold}`;
+  }
+
   announceSortChange(sortState: Sort) {
   }
 }
@@ -103,7 +107,7 @@ interface ChallengeSummary {
   chRef: Challenge;
   name: string;
   description: string;
-  progress: number;
+  progress: string;
   ptg: number;
   nextLevel: string;
   prio: number;

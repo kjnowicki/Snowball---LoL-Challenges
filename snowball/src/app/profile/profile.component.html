@@ -10,7 +10,7 @@
     <h3>Next closest goals:</h3>
     <mat-checkbox [(ngModel)]="showPointless" (change)="updateData()" color="primary">
       <span style="color: white;">
-        Show "pointless" challenges
+        Show challenges with no points to gain
       </span>
     </mat-checkbox>
     <table mat-table [dataSource]="chDataSource" matSort (matSortChange)="announceSortChange($event)">
@@ -27,7 +27,7 @@
       <ng-container matColumnDef="progress">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Progress</th>
         <td mat-cell *matCellDef="let element">
-          {{ (element.progress * 100).toFixed(2) }}%
+          {{ element.progress }}
         </td>
       </ng-container>
       <ng-container matColumnDef="ptg">
@@ -35,7 +35,7 @@
           PtG (Points to Gain)
         </th>
         <td mat-cell *matCellDef="let element">
-          {{ element.ptg }} ({{ element.nextLevel }})
+          {{ element.ptg }} at {{ element.nextLevel }}
         </td>
       </ng-container>
       <ng-container matColumnDef="prio">

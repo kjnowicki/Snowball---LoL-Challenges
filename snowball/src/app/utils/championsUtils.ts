@@ -39,13 +39,31 @@ export class ChampionsUtils {
   ) {
     return championMastery
       .filter((m) => m.championPoints < limit)
+      .sort((a, b) => b.championPoints - a.championPoints)
       .map((m) => {
         return champions.find((ch) => ch.key == m.championId.toString());
       })
       .filter(m => m != undefined) as Champion[];
   }
 
-  public static champsNames(champions: Champion[]) {
-    return champions.map(ch => ch.name);
+  public static getChampionsSortedByMasteryLevel(
+    championMastery: ChampionMastery[],
+    champions: Champion[]
+  ) {
+    return championMastery
+      .sort((a, b) => b.championLevel - a.championLevel)
+      .map((m) => {
+        return champions.find((ch) => ch.key == m.championId.toString());
+      })
+      .filter(m => m != undefined) as Champion[];
+  }
+
+  public static champsNamesAndMasteryPoints(championMastery: ChampionMastery[], champions: Champion[]) {
+    return champions.map(ch => `${ch.name} (${championMastery.find(cm => cm.championId.toString() == ch.key)?.championPoints})`) as String[];
+  }
+
+  public static champsNamesAndMasteryLevel(championMastery: ChampionMastery[], champions: Champion[]) {
+    champions = ChampionsUtils.getChampionsSortedByMasteryLevel(championMastery, champions);
+    return champions.map(ch => `${ch.name} (${championMastery.find(cm => cm.championId.toString() == ch.key)?.championLevel})`) as String[];
   }
 }
