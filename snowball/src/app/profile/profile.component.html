@@ -13,6 +13,11 @@
         Show challenges with no points to gain
       </span>
     </mat-checkbox>
+    <mat-checkbox [(ngModel)]="showRetired" (change)="updateData()" color="primary">
+      <span style="color: white;">
+        Show retired challenges you can no longer progress
+      </span>
+    </mat-checkbox>
     <table mat-table [dataSource]="chDataSource" matSort (matSortChange)="announceSortChange($event)">
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef>Name</th>
