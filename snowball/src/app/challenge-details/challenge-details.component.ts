@@ -12,9 +12,9 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { Challenge, FriendsLevels } from '../../model/challenge';
-import { Champion, Champions } from '../../model/champion';
+import { Champion } from '../../model/champion';
 import { ChallengesService } from '../services/challenges.service';
-import { ChallengeUtils } from '../utils/challengeUtils';
+import { ChallengeType, ChallengeUtils } from '../utils/challengeUtils';
 import { FriendsService } from '../services/friends.service';
 import { Friend } from '../../model/friend';
 import { ChampionsUtils } from '../utils/championsUtils';
@@ -43,7 +43,7 @@ export class ChallengeDetailsComponent implements AfterViewInit {
 
   chUtils = ChallengeUtils;
   champUtils = ChampionsUtils;
-  specificInfo = additionalInfo;
+  challengeType = ChallengeType;
 
   skinsCounts: { count: number; names: string[] }[] = [];
   championsUnderMastery: Champion[] = [];
@@ -68,8 +68,8 @@ export class ChallengeDetailsComponent implements AfterViewInit {
   }
 
   private initSpecficData() {
-    switch (this.challenge?.name) {
-      case additionalInfo.skins: {
+    switch (this.getAdditionalInfoType(this.challenge?.name)) {
+      case ChallengeType.skins: {
         this.skinsCounts = ChampionsUtils.getSkinsCount(
           this.champsService.champions
         );
@@ -78,11 +78,11 @@ export class ChallengeDetailsComponent implements AfterViewInit {
         });
         break;
       }
-      case additionalInfo.mastery: {
+      case ChallengeType.mastery: {
         this.championsUnderMastery =
           ChampionsUtils.getChampionsBelowMasteryThreshold(
             this.champsService.championMastery,
-            this.challenge.nextThreshold,
+            this.challenge?.nextThreshold ?? 0,
             this.ddService.champions
           );
         this.champsService.championsMasteryEvent.subscribe((data) => {
@@ -95,7 +95,21 @@ export class ChallengeDetailsComponent implements AfterViewInit {
         });
         break;
       }
+      default:{}
     }
+  }
+
+  getAdditionalInfoType(challengeName: string | undefined) {
+    return challengeName ? additionalInfo.find(info => info.screens.includes(challengeName))?.typeName : null;
+  }
+
+  getChampionMasteryTextList() {
+    this.initSpecficData();
+    return this.champUtils.champsNamesAndMasteryPoints(this.champsService.championMastery, this.championsUnderMastery);
+  }
+
+  getChampionMasteryLevelTextList() {
+    return this.champUtils.champsNamesAndMasteryLevel(this.champsService.championMastery, this.getAvailableItems());
   }
 
   getFriend(friendId: string): Friend | undefined {
@@ -113,15 +127,14 @@ export class ChallengeDetailsComponent implements AfterViewInit {
     switch (idType) {
       case 'CHAMPION': {
         let available = this.challenge?.availableIds.map(
-          (id) => this.getChampionById(id.toString())?.name
-        );
-        let completed = this.challenge?.completedIds.map(
-          (id) => this.getChampionById(id.toString())?.name
+          (id) => this.getChampionById(id.toString())
         );
         if (available?.length == 0) {
+          let completed = this.challenge?.completedIds.map(
+            (id) => this.getChampionById(id.toString())?.name
+          );
           available = this.ddService.champions
             .filter((ch) => !completed?.includes(ch.name))
-            .map((ch) => ch.name);
         }
         return available ?? [];
       }
@@ -129,7 +142,18 @@ export class ChallengeDetailsComponent implements AfterViewInit {
     return [];
   }
 
-  getCompletedItems(): any[] {
+  getAvailableNames(): any[] {
+    let idType = this.challenge?.idListType;
+    switch (idType) {
+      case 'CHAMPION': {
+        let champions: Champion[] = this.getAvailableItems();
+        return champions.map(ch => ch.name)
+      }
+    }
+    return this.getAvailableItems();
+  }
+
+  getCompletedNames(): any[] {
     let idType = this.challenge?.idListType;
     switch (idType) {
       case 'CHAMPION': {

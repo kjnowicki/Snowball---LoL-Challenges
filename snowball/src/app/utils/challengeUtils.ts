@@ -2,20 +2,21 @@ import { Challenge, Threshold } from '../../model/challenge';
 
 export class ChallengeUtils {
   static getChallengeProgress = (challenge: Challenge) => {
-    if (challenge.nextThreshold == 0)
-      return `${challenge.currentValue} / ${challenge.currentThreshold}`;
-    else {
+    let currentProgressText = `${challenge.currentValue}`;
+    let nextLevelText = ``;
+
+    if (challenge.nextThreshold != 0) {
       let threshold: Threshold | undefined = new Map(
         Object.entries(challenge.thresholds)
       ).get(challenge.nextLevel);
+      nextLevelText = `/ ${challenge.nextThreshold}  -  Next: ${challenge.nextLevel}`;
       if (threshold != undefined) {
-        return `${challenge.currentValue} / ${
-          challenge.nextThreshold
-        } (+ ${ChallengeUtils.getNextPointsReward(challenge)} Points)`;
-      } else {
-        return `${challenge.currentValue} / ${challenge.nextThreshold}`;
+        nextLevelText += ` (+ ${ChallengeUtils.getNextPointsReward(challenge)} Points)`;
       }
+    } else {
+      nextLevelText += "- COMPLETED";
     }
+    return `${currentProgressText} ${nextLevelText}`;
   };
 
   static getNextPointsReward = (challenge: Challenge) => {
@@ -30,12 +31,19 @@ export class ChallengeUtils {
   };
 }
 
-export const additionalInfo: AdditionalInfo = {
-  skins: 'Need a Bigger Closet',
-  mastery: "Catch 'em All",
-};
+export enum ChallengeType {
+  skins,
+  mastery,
+  masteryLevel
+}
 
 interface AdditionalInfo {
-  skins: string;
-  mastery: string;
+  typeName: ChallengeType;
+  screens: string[];
 }
+
+export const additionalInfo: AdditionalInfo[] = [
+  {typeName: ChallengeType.skins, screens: ['Need a Bigger Closet'] },
+  {typeName: ChallengeType.mastery, screens:  ["Catch 'em All"] },
+  {typeName: ChallengeType.masteryLevel, screens: ["Master Yourself", "Master the Enemy (Legacy)", "Master the Enemy"] },
+];

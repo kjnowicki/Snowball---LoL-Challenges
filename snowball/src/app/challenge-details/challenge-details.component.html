@@ -48,8 +48,8 @@
   </div>
   <div *ngIf="!isSubchallenge" class="details">
     <div>
-      @switch (challenge?.name) {
-      @case (specificInfo.skins) {
+      @switch (getAdditionalInfoType(challenge?.name)) {
+      @case (challengeType.skins) {
       <div>
         <h3>Champions' skin count</h3>
         <div *ngFor="let namesPerCount of skinsCounts">
@@ -58,22 +58,28 @@
         </div>
       </div>
       }
-      @case (specificInfo.mastery) {
+      @case (challengeType.mastery) {
       <div>
         <h3>Champions closest to mastery breakpoint:</h3>
-        <span>{{champUtils.champsNames(championsUnderMastery).join(", ")}}</span>
+        <span>{{getChampionMasteryTextList().join(", ")}}</span>
+      </div>
+      }
+      @case (challengeType.masteryLevel) {
+      <div>
+        <h3>Champions closest to mastery breakpoint:</h3>
+        <span>{{getChampionMasteryLevelTextList().join(", ")}}</span>
       </div>
       }
       @default {
-      <div *ngIf="getAvailableItems().length > 0">
-        <h3>Available {{challenge?.idListType?.toLowerCase()}}s:</h3>
-        <span>{{getAvailableItems().sort().join(", ")}}</span>
-      </div>
-      <div *ngIf="getCompletedItems().length > 0">
-        <h3>Completed {{challenge?.idListType?.toLowerCase()}}s:</h3>
-        <span>{{getCompletedItems().sort().join(", ")}}</span>
-      </div>
       } }
+      <div *ngIf="getAvailableNames().length > 0">
+        <h3>Available {{challenge?.idListType?.toLowerCase()}}s:</h3>
+        <span>{{getAvailableNames().sort().join(", ")}}</span>
+      </div>
+      <div *ngIf="getCompletedNames().length > 0">
+        <h3>Completed {{challenge?.idListType?.toLowerCase()}}s:</h3>
+        <span>{{getCompletedNames().sort().join(", ")}}</span>
+      </div>
     </div>
     <div *ngIf="!isSubchallenge  && challenge?.childrenIds?.length">
       <h3>Sub-challenges:</h3>
