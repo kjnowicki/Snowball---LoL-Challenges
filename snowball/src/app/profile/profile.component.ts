@@ -47,6 +47,7 @@ export class ProfileComponent implements AfterViewInit {
   chDataSource: MatTableDataSource<ChallengeSummary> =
     new MatTableDataSource<ChallengeSummary>([]);
   readonly showPointless = model(false);
+  readonly showRetired = model(false);
 
   chUtil = ChallengeUtils;
 
@@ -81,9 +82,10 @@ export class ProfileComponent implements AfterViewInit {
         progress: `${(progress * 100).toFixed(2)}% (${this.getProgressText(ch)})`,
         ptg: ptg,
         nextLevel: ch.nextLevel,
-        prio: progress * ptg
+        prio: progress * ptg,
+        retired: ch.retireTimestamp != 0
       };
-    }).filter(ch => this.showPointless() || ch.ptg > 0);
+    }).filter(ch => this.showPointless() || ch.ptg > 0).filter(ch => this.showRetired() || !ch.retired);
   }
 
   updateData() {
@@ -111,4 +113,5 @@ interface ChallengeSummary {
   ptg: number;
   nextLevel: string;
   prio: number;
+  retired: boolean;
 }
