@@ -11,10 +11,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { SummonerService } from '../services/summoner.service';
 
 @Component({
-    selector: 'champ-select',
-    imports: [CommonModule, MatTableModule, MatIconModule],
-    templateUrl: './champ-select.component.html',
-    styleUrl: './champ-select.component.css'
+  selector: 'champ-select',
+  imports: [CommonModule, MatTableModule, MatIconModule],
+  templateUrl: './champ-select.component.html',
+  styleUrl: './champ-select.component.css',
 })
 export class ChampSelectComponent implements OnChanges {
   championChallenges: Challenge[] = [];
@@ -28,17 +28,18 @@ export class ChampSelectComponent implements OnChanges {
   @Input() sessionData: ChampSelectSession | undefined;
   sessionType: string = '';
 
-  constructor(private ddService: DataDragonService) {
+  constructor(private ddService: DataDragonService) {     
     this.champions = ddService.champions;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.sessionData == undefined) return;
-    this.sessionType = this.sessionData.allowRerolling ? "ARAM" : "CLASSIC";
+    this.sessionType = this.sessionData.allowRerolling ? 'ARAM' : 'CLASSIC';
     this.championChallenges = ChallengesService.challengesCached
       .filter((ch) => ch.idListType == 'CHAMPION')
       .filter((ch) => ch.retireTimestamp == 0)
-      .filter((ch) => ch.gameModes.includes(this.sessionType));
+      .filter((ch) => !(ch.category == "COLLECTION" && ch.source != "ETERNALS"))
+      .filter((ch) => ch.gameModes.includes(this.sessionType) || ch.gameModes.length == 0);
     this.displayedColumns = [
       'name',
       'count',
@@ -50,13 +51,14 @@ export class ChampSelectComponent implements OnChanges {
       if (challenge.availableIds.length == 0) {
         challenge.availableIds = this.getReverseCompletion(challenge);
       }
-      challenge.availableIds.forEach((champId) => {
+      challenge.availableIds.filter(avId => !challenge.completedIds.includes(avId)).forEach((champId) => {
         let champ;
         if (
           this.sessionType == 'ARAM' &&
           !this.getSessionChamps().includes(champId)
-        )
+        ) {
           return;
+        }
         champ = ChampionsUtils.getChampionById(this.champions, champId);
         if (!champ) return;
         if (this.champChallengesMap.has(champ)) {
@@ -71,9 +73,9 @@ export class ChampSelectComponent implements OnChanges {
       (champ) =>
         this.sessionData?.myTeam
           .find(
-            (team) => team.summonerId == SummonerService.summoner?.summonerId
+            (team) => team.summonerId == SummonerService.summoner?.summonerId,
           )
-          ?.championId.toString() == champ.key
+          ?.championId.toString() == champ.key,
     );
   }
 
@@ -95,7 +97,7 @@ export class ChampSelectComponent implements OnChanges {
       champIds.push(benchChamp.championId);
     });
     this.sessionData?.myTeam.forEach((teammate) =>
-      champIds.push(teammate.championId)
+      champIds.push(teammate.championId),
     );
     return champIds;
   }
