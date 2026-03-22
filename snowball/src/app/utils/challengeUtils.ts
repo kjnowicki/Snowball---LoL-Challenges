@@ -1,8 +1,16 @@
 import { Challenge, Threshold } from '../../model/challenge';
+import { ChallengesService } from '../services/challenges.service';
 import { DataDragonService } from '../services/data-dragon.service';
 import { ChampionsUtils } from './championsUtils';
 
 export class ChallengeUtils {
+  static getChampionChallenges = () => {
+    return ChallengesService.challengesCached
+          .filter((ch) => ch.idListType == 'CHAMPION')
+          .filter((ch) => ch.retireTimestamp == 0)
+          .filter((ch) => !(ch.category == "COLLECTION" && ch.source != "ETERNALS"));
+  }
+
   static getChallengeProgress = (challenge: Challenge) => {
     let currentProgressText = `${challenge.currentValue}`;
     let nextLevelText = ``;
@@ -36,13 +44,13 @@ export class ChallengeUtils {
     let idType = challenge.idListType;
     switch (idType) {
       case 'CHAMPION': {
+        let completed = challenge.completedIds.map(
+          (id) => ChampionsUtils.getChampionById(DataDragonService.champions, id)?.name
+        );
         let available = challenge.availableIds.map(
           (id) => ChampionsUtils.getChampionById(DataDragonService.champions, id)
-        );
+        ).filter(champ => champ && !completed?.includes(champ.name));
         if (available?.length == 0) {
-          let completed = challenge.completedIds.map(
-            (id) => ChampionsUtils.getChampionById(DataDragonService.champions, id)?.name
-          );
           available = DataDragonService.champions
             .filter((ch) => !completed?.includes(ch.name))
         }

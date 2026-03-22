@@ -9,6 +9,7 @@ import { ChampionsUtils } from '../utils/championsUtils';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { SummonerService } from '../services/summoner.service';
+import { ChallengeUtils } from '../utils/challengeUtils';
 
 @Component({
   selector: 'champ-select',
@@ -33,11 +34,8 @@ export class ChampSelectComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (this.sessionData == undefined) return;
     this.sessionType = this.sessionData.allowRerolling ? 'ARAM' : 'CLASSIC';
-    this.championChallenges = ChallengesService.challengesCached
-      .filter((ch) => ch.idListType == 'CHAMPION')
-      .filter((ch) => ch.retireTimestamp == 0)
-      .filter((ch) => !(ch.category == "COLLECTION" && ch.source != "ETERNALS"))
-      .filter((ch) => ch.gameModes.includes(this.sessionType) || ch.gameModes.length == 0);
+    this.championChallenges = ChallengeUtils.getChampionChallenges()
+          .filter((ch) => ch.gameModes.includes(this.sessionType) || ch.gameModes.length == 0);
     this.displayedColumns = [
       'name',
       'count',
