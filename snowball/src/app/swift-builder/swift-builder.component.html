@@ -1,0 +1,39 @@
+<div>
+    <div id="builder-switch">
+        <mat-radio-group [(ngModel)]="champBasedBuilder">
+            <mat-radio-button [value]=true>Choose champions</mat-radio-button>
+            <mat-radio-button [value]=false>Choose challenges</mat-radio-button>
+        </mat-radio-group>
+    </div>
+    @if (champBasedBuilder) {
+        <div id="champions-select">
+            @for (champSelection of championsSelected; track $index) {
+                <mat-select [(value)]="championsSelected[$index]" style="width: calc(20% - 6px); display: inline-block; background-color: black; border: 1px white solid; padding: 3px 0px 3px 4px;" panelClass="dark-dropdown" placeholder="Select a champion">
+                    <mat-option>
+                        <input
+                            matInput
+                            placeholder="Search..."
+                            [(ngModel)]="searchChampTerm[$index]"
+                            (click)="$event.stopPropagation()"
+                            (keydown)="$event.stopPropagation()"/>
+                    </mat-option>
+                    @for (champ of getFilteredChampionsToSelect($index); track champ.id) {
+                        <mat-option [value]="champ">{{champ.name}}</mat-option>
+                    } @empty {
+                        <mat-option disabled>No matches found</mat-option>
+                    }
+                </mat-select>
+            }
+        </div>
+        <div id="challenges-satisfied">
+            
+        </div>
+    } @else {
+        <div id="challenges-select">
+
+        </div>
+        <div id="champions-available">
+            
+        </div>
+    }
+</div>

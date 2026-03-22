@@ -21,15 +21,13 @@ export class ChampSelectComponent implements OnChanges {
   displayedColumns: string[] = [];
   availableChampions: MatTableDataSource<Champion> = new MatTableDataSource();
   champChallengesMap: Map<Champion, Challenge[]> = new Map();
-  champions: Champion[];
   selectedChampion: Champion | undefined;
   chUtils = ChampionsUtils;
 
   @Input() sessionData: ChampSelectSession | undefined;
   sessionType: string = '';
 
-  constructor(private ddService: DataDragonService) {     
-    this.champions = ddService.champions;
+  constructor() {    
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -59,7 +57,7 @@ export class ChampSelectComponent implements OnChanges {
         ) {
           return;
         }
-        champ = ChampionsUtils.getChampionById(this.champions, champId);
+        champ = ChampionsUtils.getChampionById(DataDragonService.champions, champId);
         if (!champ) return;
         if (this.champChallengesMap.has(champ)) {
           this.champChallengesMap.get(champ)?.push(challenge);
@@ -69,7 +67,7 @@ export class ChampSelectComponent implements OnChanges {
       });
     });
     this.availableChampions.data = this.getChampionsAvailable();
-    this.selectedChampion = this.champions.find(
+    this.selectedChampion = DataDragonService.champions.find(
       (champ) =>
         this.sessionData?.myTeam
           .find(
@@ -103,7 +101,7 @@ export class ChampSelectComponent implements OnChanges {
   }
 
   getReverseCompletion(challenge: Challenge): number[] {
-    return this.ddService.champions
+    return DataDragonService.champions
       .map((ch) => Number(ch.key))
       .filter((key) => !challenge.completedIds.includes(key));
   }

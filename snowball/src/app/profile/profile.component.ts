@@ -71,6 +71,10 @@ export class ProfileComponent implements AfterViewInit {
     this.navigate.emit(NavigationSwitch.CH_OVERVIEW);
   }
 
+  goToSwiftBuilder() {
+    this.navigate.emit(NavigationSwitch.SWIFT_BUILDER);
+  }
+
   mapChallenges(challenges: Challenge[]): ChallengeSummary[] {
     return challenges.filter(ch => ch.nextLevel != "" && !ch.childrenIds.length).map(ch => {
       const progress = this.getProgress(ch);

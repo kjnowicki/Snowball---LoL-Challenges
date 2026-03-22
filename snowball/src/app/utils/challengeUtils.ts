@@ -1,4 +1,6 @@
 import { Challenge, Threshold } from '../../model/challenge';
+import { DataDragonService } from '../services/data-dragon.service';
+import { ChampionsUtils } from './championsUtils';
 
 export class ChallengeUtils {
   static getChallengeProgress = (challenge: Challenge) => {
@@ -29,6 +31,32 @@ export class ChallengeUtils {
         ?.quantity ?? challenge.pointsAwarded) - challenge.pointsAwarded
     );
   };
+
+  static getAvailableItems(challenge: Challenge): any[] {
+    let idType = challenge.idListType;
+    switch (idType) {
+      case 'CHAMPION': {
+        let available = challenge.availableIds.map(
+          (id) => ChampionsUtils.getChampionById(DataDragonService.champions, id)
+        );
+        if (available?.length == 0) {
+          let completed = challenge.completedIds.map(
+            (id) => ChampionsUtils.getChampionById(DataDragonService.champions, id)?.name
+          );
+          available = DataDragonService.champions
+            .filter((ch) => !completed?.includes(ch.name))
+        }
+        return available ?? [];
+      }
+    }
+    return [];
+  }
+
+  static getSubChallenges(challenges: Challenge[],idList: number[]) {
+    return challenges.filter((ch) =>
+      idList.includes(ch.id)
+    );
+  }
 }
 
 export enum ChallengeType {

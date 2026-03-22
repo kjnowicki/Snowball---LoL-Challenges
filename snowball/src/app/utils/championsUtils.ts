@@ -1,6 +1,7 @@
 import { Champion } from '../../model/champion';
 import { LocalChampion } from '../../model/local.champion';
 import { ChampionMastery } from '../../model/mastery';
+import { ChampionsService } from '../services/champions.service';
 import { LcuService } from '../services/lcu.service';
 
 export class ChampionsUtils {
@@ -8,6 +9,10 @@ export class ChampionsUtils {
 
   public static getChampionById(champions: Champion[], key: number): Champion | undefined {
     return champions.find(ch => ch.key == key.toString());
+  }
+
+  public static getLocalChampionById(key: number): LocalChampion | undefined {
+    return ChampionsService.champions.find(ch => ch.id == key);
   }
 
   public static getSkinsCount(champions: LocalChampion[]) {

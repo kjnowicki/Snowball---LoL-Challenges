@@ -7,7 +7,7 @@ import { ChampionMastery } from '../../model/mastery';
   providedIn: 'root',
 })
 export class ChampionsService {
-  champions: LocalChampion[] = [];
+  static champions: LocalChampion[] = [];
   championMastery: ChampionMastery[] = [];
 
   @Output() championsEvent: EventEmitter<LocalChampion[]> = new EventEmitter();
@@ -42,8 +42,8 @@ export class ChampionsService {
       (data) => {
         if (data.data) {
           let json = JSON.parse(data.data);
-          this.champions = Array.from(json);
-          this.championsEvent.emit(this.champions);
+          ChampionsService.champions = Array.from(json);
+          this.championsEvent.emit(ChampionsService.champions);
         }
       }
     );

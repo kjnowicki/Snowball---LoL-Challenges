@@ -8,6 +8,8 @@
 } @case (navigationSwitch.CH_DETAILS) {
 <challenge-details [challenge]="chosenChallenge"
     (close)="this.currentNavigationSwitch = navigationSwitch.CH_OVERVIEW"></challenge-details>
+} @case (navigationSwitch.SWIFT_BUILDER) {
+<app-swift-builder></app-swift-builder>
 } } } @else {
 <champ-select [sessionData]="session!"></champ-select>
 } } @else if(gameLaunched) {
