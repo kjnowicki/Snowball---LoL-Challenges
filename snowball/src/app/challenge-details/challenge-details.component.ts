@@ -71,7 +71,7 @@ export class ChallengeDetailsComponent implements AfterViewInit {
     switch (this.getAdditionalInfoType(this.challenge?.name)) {
       case ChallengeType.skins: {
         this.skinsCounts = ChampionsUtils.getSkinsCount(
-          this.champsService.champions
+          ChampionsService.champions
         );
         this.champsService.championsEvent.subscribe((data) => {
           this.skinsCounts = ChampionsUtils.getSkinsCount(data);
@@ -83,14 +83,14 @@ export class ChallengeDetailsComponent implements AfterViewInit {
           ChampionsUtils.getChampionsBelowMasteryThreshold(
             this.champsService.championMastery,
             this.challenge?.nextThreshold ?? 0,
-            this.ddService.champions
+            DataDragonService.champions
           );
         this.champsService.championsMasteryEvent.subscribe((data) => {
           this.championsUnderMastery =
             ChampionsUtils.getChampionsBelowMasteryThreshold(
               data,
               this.challenge?.nextThreshold ?? 0,
-              this.ddService.champions
+              DataDragonService.champions
             );
         });
         break;
@@ -123,23 +123,7 @@ export class ChallengeDetailsComponent implements AfterViewInit {
   }
 
   getAvailableItems(): any[] {
-    let idType = this.challenge?.idListType;
-    switch (idType) {
-      case 'CHAMPION': {
-        let available = this.challenge?.availableIds.map(
-          (id) => this.getChampionById(id.toString())
-        );
-        if (available?.length == 0) {
-          let completed = this.challenge?.completedIds.map(
-            (id) => this.getChampionById(id.toString())?.name
-          );
-          available = this.ddService.champions
-            .filter((ch) => !completed?.includes(ch.name))
-        }
-        return available ?? [];
-      }
-    }
-    return [];
+    return this.challenge == undefined ? [] : ChallengeUtils.getAvailableItems(this.challenge);
   }
 
   getAvailableNames(): any[] {
@@ -159,7 +143,7 @@ export class ChallengeDetailsComponent implements AfterViewInit {
       case 'CHAMPION': {
         return (
           this.challenge?.completedIds.map(
-            (id) => this.getChampionById(id.toString())?.name
+            (id) => this.getChampionById(id)?.name
           ) ?? []
         );
       }
@@ -167,14 +151,12 @@ export class ChallengeDetailsComponent implements AfterViewInit {
     return [];
   }
 
-  getChampionById(id: string) {
-    return this.ddService.champions.find((champion) => champion.key == id);
+  getChampionById(id: number) {
+    return ChampionsUtils.getChampionById(DataDragonService.champions, id);
   }
 
   getSubChallenges(idList: number[]) {
-    return ChallengesService.challengesCached.filter((ch) =>
-      idList.includes(ch.id)
-    );
+    return ChallengeUtils.getSubChallenges(ChallengesService.challengesCached, idList);
   }
 
   chooseParentChallenge() {

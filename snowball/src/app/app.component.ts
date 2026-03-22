@@ -14,6 +14,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { ChampSelectService } from './services/champ.select.service';
 import { ChampSelectSession } from '../model/session';
 import { ChampSelectComponent } from './champ-select/champ-select.component';
+import { SwiftBuilderComponent } from './swift-builder/swift-builder.component';
 
 @Component({
     selector: 'app-root',
@@ -24,6 +25,7 @@ import { ChampSelectComponent } from './champ-select/champ-select.component';
         MatProgressBarModule,
         ProfileComponent,
         ChampSelectComponent,
+        SwiftBuilderComponent
     ],
     templateUrl: './app.component.html',
     styleUrl: './app.component.css'
@@ -160,4 +162,5 @@ export enum NavigationSwitch {
   START,
   CH_OVERVIEW,
   CH_DETAILS,
+  SWIFT_BUILDER,
 }

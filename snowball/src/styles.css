@@ -23,3 +23,22 @@ button:hover mat-icon {
 .wrapper {
   margin-inline: 2%;
 }
+
+
+/* ------------ */
+.dark-dropdown {
+  background-color: #333333 !important;
+}
+
+.dark-dropdown .mat-mdc-option .mdc-list-item__primary-text {
+  color: #ffffff !important;
+}
+
+.dark-dropdown .mat-mdc-option:hover,
+.dark-dropdown .mat-mdc-option:focus {
+  background-color: #444444 !important; 
+}
+
+.dark-dropdown .mat-mdc-select-search-input {
+  color: #ffffff;
+}
