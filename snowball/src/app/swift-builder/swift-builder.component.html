@@ -8,7 +8,10 @@
     @if (champBasedBuilder) {
         <div id="champions-select">
             @for (champSelection of championsSelected; track $index) {
-                <mat-select [(value)]="championsSelected[$index]" style="width: calc(20% - 6px); display: inline-block; background-color: black; border: 1px white solid; padding: 3px 0px 3px 4px;" panelClass="dark-dropdown" placeholder="Select a champion">
+                <mat-select [(value)]="championsSelected[$index]"
+                    style="width: calc(20% - 6px); display: inline-block; background-color: black; border: 1px white solid; padding: 3px 0px 3px 4px;"
+                    panelClass="dark-dropdown"
+                    [placeholder]="getPlaceholder($index)">
                     <mat-option>
                         <input
                             matInput
@@ -26,7 +29,32 @@
             }
         </div>
         <div id="challenges-satisfied">
-            
+            <table mat-table [dataSource]="getSatisfiedChallenges()">
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef> Name </th>
+                    <td mat-cell *matCellDef="let element">
+                        @let challenge = challengeType(element);
+                        {{ challenge.name }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="description">
+                    <th mat-header-cell *matHeaderCellDef> Description </th>
+                    <td mat-cell *matCellDef="let element">
+                        @let challenge = challengeType(element);
+                        {{ challenge.description }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="progress">
+                    <th mat-header-cell *matHeaderCellDef> Progress </th>
+                    <td mat-cell *matCellDef="let element">
+                        @let challenge = challengeType(element);
+                        {{ challUtils.getChallengeProgress(challenge) }}
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="challengesSatisfiedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: challengesSatisfiedColumns;"></tr>
+            </table>
         </div>
     } @else {
         <div id="challenges-select">
