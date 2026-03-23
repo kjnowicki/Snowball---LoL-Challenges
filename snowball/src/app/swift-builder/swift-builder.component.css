@@ -1,12 +1,8 @@
-#builder-switch {
-    color: #ffffff;
-}
-
-:host ::ng-deep .mat-mdc-radio-button .mdc-label {
-  color: #ffffff;
-}
-
-:host ::ng-deep .mat-mdc-select-value-text {
+:host ::ng-deep .mat-mdc-radio-button .mdc-label,
+:host ::ng-deep .mat-mdc-select-value-text,
+:host ::ng-deep .mat-mdc-select-placeholder,
+:host ::ng-deep .mdc-floating-label,
+:host ::ng-deep .mdc-label {
   color: #ffffff;
 }
 
@@ -16,12 +12,4 @@
 
 :host ::ng-deep .mat-mdc-radio-button .mdc-radio__outer-circle {
   border-color: #ffffff !important;
-}
-
-:host ::ng-deep .mat-mdc-select-placeholder {
-  color: #ffffff !important;
-}
-
-:host ::ng-deep .mdc-floating-label {
-  color: #ffffff !important;
 }
