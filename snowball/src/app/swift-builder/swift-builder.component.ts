@@ -5,17 +5,17 @@ import { Champion } from '../../model/champion';
 import { DataDragonService } from '../services/data-dragon.service';
 import { MatSelect, MatOption } from "@angular/material/select";
 import { MatInput } from "@angular/material/input";
-import { ChallengesService } from '../services/challenges.service';
 import { Challenge } from '../../model/challenge';
 import { ChallengeUtils } from '../utils/challengeUtils';
 import { MatTable, MatTableModule } from "@angular/material/table";
 import { MatCheckbox } from "@angular/material/checkbox";
 import { MatTooltip } from "@angular/material/tooltip";
 import { SelectionModel } from '@angular/cdk/collections';
+import { MatIconModule } from "@angular/material/icon";
 
 @Component({
   selector: 'app-swift-builder',
-  imports: [MatRadioModule, FormsModule, MatSelect, MatOption, MatInput, MatTable, MatTableModule, MatCheckbox, MatTooltip],
+  imports: [MatRadioModule, FormsModule, MatSelect, MatOption, MatInput, MatTable, MatTableModule, MatCheckbox, MatTooltip, MatIconModule],
   templateUrl: './swift-builder.component.html',
   styleUrl: './swift-builder.component.css'
 })
@@ -27,21 +27,24 @@ export class SwiftBuilderComponent {
   challengesToSelect: Challenge[] = [];
 
   synergyChallengesColumns: string[] = ['mandatory', 'name', 'synergy', 'available', 'progress'];
-  soloChallengesColumns: string[] = ['name', 'description', 'progress'];
+  soloChallengesColumns: string[] = ['mandatory-solo', 'name', 'description', 'progress'];
   showSoloChallenges: boolean = true;
   showTeamChallenges: boolean = true;
   showCompletedChallenges: boolean = false;
   showRecommendedChampions: boolean = true;
   championsRecommended: string = "";
+  soloChampionsRecommended: string = "";
 
   mandatorySelection = new SelectionModel<Challenge>(true, []);
+  mandatorySoloSelection = new SelectionModel<Challenge>(true, []);
 
   challUtils = ChallengeUtils;
 
   constructor(){
     this.championsToSelect = DataDragonService.champions;
-    this.challengesToSelect = ChallengeUtils.getChampionChallenges();
+    this.challengesToSelect = ChallengeUtils.getChampionChallenges().filter(chall => !chall.gameModes.includes("CHERRY"));
     this.championsRecommended = this.getRecommendedChampions();
+    this.soloChampionsRecommended = this.getSoloRecommendedChampions();
   }
 
   getFilteredChampionsToSelect(index: number) {
@@ -69,19 +72,25 @@ export class SwiftBuilderComponent {
     return this.championsSelected.filter(ch => ch && champions.includes(ch)).length;
   }
 
-  getSoloSatisfiedChallenges() {
+  getSoloChallenges() {
     return this.challengesToSelect.filter(challenge => {
+      return !(this.isChallengeSynergyOfThree(challenge) || this.isChallengeSynergyOfFive(challenge));
+    })
+    .filter(ch => this.isChallengeRewardRelevant(ch))
+    .sort((a,b) => {
+      let bMet = this.isSoloChallengeSatisfied(b) ? 1 : 0;
+      let aMet = this.isSoloChallengeSatisfied(a) ? 1 : 0;
+      let dif = bMet - aMet;
+      return dif != 0 ? dif : a.name.localeCompare(b.name);
+    });
+  }
+
+  isSoloChallengeSatisfied(challenge: Challenge) {
       let champions: Champion[] = ChallengeUtils.getAvailableItems(challenge);
-      if (this.isChallengeSynergyOfThree(challenge) || this.isChallengeSynergyOfFive(challenge)) {
-        return false;
-      }
-      else if (this.championsSelected[0]) {
+      if (this.championsSelected[0]) {
         return champions.includes(this.championsSelected[0]);
       }
       return false;
-    })
-    .filter(ch => this.isChallengeRewardRelevant(ch))
-    .sort((a,b) => a.name.localeCompare(b.name));
   }
 
   private isChallengeRewardRelevant(ch: Challenge): unknown {
@@ -133,35 +142,53 @@ export class SwiftBuilderComponent {
     this.championsRecommended = this.getRecommendedChampions();
   }
 
+  mandatorySoloSelected(challenge: Challenge) {
+    this.mandatorySoloSelection.toggle(challenge);
+    this.soloChampionsRecommended = this.getSoloRecommendedChampions();
+  }
+
   championsSelectedChanged(index: number) {
     this.searchChampTerm[index] = "";
     this.championsRecommended = this.getRecommendedChampions();
+    this.soloChampionsRecommended = this.getSoloRecommendedChampions();
+  }
+
+  getSoloRecommendedChampions() {
+    let championsRecommendationScore = new Map(this.championsToSelect.filter(champ => !this.championsSelected.includes(champ)).map(champ => [champ, 0]));
+    this.getSoloChallenges()
+      .forEach(chall => {
+        this.getAvailableChampionsList(chall).forEach(champ => {
+          let currentScore = championsRecommendationScore.get(champ) ?? 0;
+          let mandatoryMultiplier = this.mandatorySoloSelection.isSelected(chall) ? 100 : 1;
+          championsRecommendationScore.set(champ, currentScore + 1 * mandatoryMultiplier);
+        })
+      });
+    return this.championsToSelect.slice().sort((champA, champB) => {
+      return (championsRecommendationScore.get(champB) ?? 0) - (championsRecommendationScore.get(champA) ?? 0);
+    }).slice(0, 5).map(ch => ch.name).join(", ");
   }
 
   getRecommendedChampions() {
     let championsRecommendationScore = new Map(this.championsToSelect.filter(champ => !this.championsSelected.includes(champ)).map(champ => [champ, 0]));
     this.getSynergyChallenges()
-      .map(chall => {
+      .forEach(chall => {
         let synergyPower = this.getAvailableChampionsList(chall).filter(ch => this.championsSelected.includes(ch)).length;
         let synergyRequired = this.isChallengeSynergyOfThree(chall) ? 3 : 5;
-        let synergyPoints = synergyRequired > synergyPower ? synergyPower : 0;
-        return {
-          champions: this.getUnselectedAvailableChampionsList(chall),
-          synergyPoints: synergyPoints,
-          synergyRequired: synergyRequired,
-          isMandatory: this.mandatorySelection.isSelected(chall)
-        };
-      })
-      .forEach(synergyDetails => {
-        synergyDetails.champions.forEach(champ => {
+        let synergyPoints = synergyRequired > synergyPower ? (synergyPower + 1) * 10 / synergyRequired + 1 : 0;
+        let mandatoryMultiplier = this.mandatorySelection.isSelected(chall) ? 100 : 1;
+
+        this.getUnselectedAvailableChampionsList(chall).forEach(champ => {
           let currentScore = championsRecommendationScore.get(champ) ?? 0;
-          let mandatoryMultiplier = synergyDetails.isMandatory ? 100 : 1;
-          let newScore = currentScore + (mandatoryMultiplier * synergyDetails.synergyPoints * 2 + 1)  / synergyDetails.synergyRequired;
+          let newScore = currentScore + synergyPoints * mandatoryMultiplier;
           championsRecommendationScore.set(champ, newScore);
-        })    
+        })
       });
     return this.championsToSelect.slice().sort((champA, champB) => {
       return (championsRecommendationScore.get(champB) ?? 0) - (championsRecommendationScore.get(champA) ?? 0);
     }).slice(0, 5).map(ch => ch.name).join(", ");
+  }
+  
+  resetSelected() {
+    this.championsSelected = new Array(5);
   }
 }
