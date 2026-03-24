@@ -32,3 +32,7 @@ table th {
 :host ::ng-deep .mdc-checkbox__background {
   border-color: #ffffff !important;
 }
+
+h3 {
+  margin: 0;
+}
