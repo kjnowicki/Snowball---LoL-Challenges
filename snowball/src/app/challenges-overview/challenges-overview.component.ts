@@ -68,7 +68,7 @@ export class ChallengesOverviewComponent {
 
   updateFilter(event: Event) {
     let filterValue = (event.target as HTMLInputElement).value;
-    if(filterValue.length < 3) return;
+    if(0 < filterValue.length && filterValue.length < 3) filterValue = "";
     this.filteredData.data = this.mapFilteredData(this.allData, filterValue);
   }
 
