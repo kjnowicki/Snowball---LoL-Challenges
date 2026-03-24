@@ -24,7 +24,7 @@
     <div id="champions-select">
         @for (champSelection of championsSelected; track $index) {
             <mat-select [(value)]="championsSelected[$index]"
-                style="width: calc(20% - 6px); display: inline-block; background-color: black; border: 1px white solid; padding: 3px 0px 3px 4px;"
+                style="width: calc(20% - 10px); display: inline-block; background-color: black; border: 1px white solid; padding: 3px 4px 3px 4px;"
                 panelClass="dark-dropdown"
                 [placeholder]="getPlaceholder($index)"
                 (selectionChange)="championsSelectedChanged($index)">
@@ -48,25 +48,44 @@
     <div id="challenges-satisfied">
         @if (showTeamChallenges) {
             <table mat-table [dataSource]="getSynergyChallenges()">
+                <ng-container matColumnDef="mandatory">
+                    <th mat-header-cell *matHeaderCellDef> Mandatory </th>
+                    <td mat-cell *matCellDef="let element" style="text-align: center;">
+                        <mat-checkbox 
+                            [checked]="mandatorySelection.isSelected(element)" 
+                            (change)="mandatorySelected(element)">
+                        </mat-checkbox>
+                    </td>
+                </ng-container>
                 <ng-container matColumnDef="name">
                     <th mat-header-cell *matHeaderCellDef> Synergy Challenge </th>
                     <td mat-cell *matCellDef="let element">
                         @let challenge = challengeType(element);
-                        <span style="font-weight: bold;" [matTooltip]="challenge.description">{{ challenge.name }}</span>
+                        <span style="font-weight: bold; font-size: large; padding: 3px 0px 3px;" [matTooltip]="challenge.description"  matTooltipPosition="after">{{ challenge.name }}</span>
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="synergy">
                     <th mat-header-cell *matHeaderCellDef> Synergy </th>
-                    <td mat-cell *matCellDef="let element">
+                    <td mat-cell *matCellDef="let element" style="text-align: center;">
                         @let challenge = challengeType(element);
                         {{ getSynergyCount(challenge) }} / {{ getSynergyBase(challenge) }}
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="available">
                     <th mat-header-cell *matHeaderCellDef> Champions available </th>
-                    <td mat-cell *matCellDef="let element">
+                    <td mat-cell *matCellDef="let element" style="padding: 3px 0px 3px 10px;">
                         @let challenge = challengeType(element);
-                        {{ getUnselectedAvailableChampionsListNames(challenge) }}
+                        @let unselectedChamps = getUnselectedAvailableChampionsListNames(challenge);
+                        @let selectedChamps = getSelectedAvailableChampionsListNames(challenge);
+                        @if (unselectedChamps.length > 0) {
+                            <span style="font-size: large;">{{ getUnselectedAvailableChampionsListNames(challenge) }}</span>
+                        }
+                        @if (selectedChamps.length > 0) {
+                            @if (unselectedChamps.length > 0) {
+                                <br>
+                            }
+                            <b> > Already selected: </b><span style="font-size: medium;">{{ getSelectedAvailableChampionsListNames(challenge) }}</span>
+                        }
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="progress">
@@ -82,7 +101,7 @@
             </table>
         }
         @if (showSoloChallenges) {
-            <table mat-table [dataSource]="getSoloSatisfiedChallenges()">
+            <table mat-table [dataSource]="getSoloSatisfiedChallenges()" style="border-top: 1px white solid;">
                 <ng-container matColumnDef="name">
                     <th mat-header-cell *matHeaderCellDef> Solo Challenge </th>
                     <td mat-cell *matCellDef="let element">
