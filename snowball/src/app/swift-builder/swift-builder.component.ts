@@ -11,6 +11,7 @@ import { ChallengeUtils } from '../utils/challengeUtils';
 import { MatTable, MatTableModule } from "@angular/material/table";
 import { MatCheckbox } from "@angular/material/checkbox";
 import { MatTooltip } from "@angular/material/tooltip";
+import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-swift-builder',
@@ -25,7 +26,7 @@ export class SwiftBuilderComponent {
   challengesSelected: Challenge[] = [];
   challengesToSelect: Challenge[] = [];
 
-  synergyChallengesColumns: string[] = ['name', 'synergy', 'available', 'progress'];
+  synergyChallengesColumns: string[] = ['mandatory', 'name', 'synergy', 'available', 'progress'];
   soloChallengesColumns: string[] = ['name', 'description', 'progress'];
   showSoloChallenges: boolean = true;
   showTeamChallenges: boolean = true;
@@ -33,11 +34,14 @@ export class SwiftBuilderComponent {
   showRecommendedChampions: boolean = true;
   championsRecommended: string = "";
 
+  mandatorySelection = new SelectionModel<Challenge>(true, []);
+
   challUtils = ChallengeUtils;
 
   constructor(){
     this.championsToSelect = DataDragonService.champions;
     this.challengesToSelect = ChallengeUtils.getChampionChallenges();
+    this.championsRecommended = this.getRecommendedChampions();
   }
 
   getFilteredChampionsToSelect(index: number) {
@@ -116,6 +120,19 @@ export class SwiftBuilderComponent {
       .join(", ");
   }
 
+  getSelectedAvailableChampionsListNames(challenge: Challenge) {
+    return this.getAvailableChampionsList(challenge)
+      .filter(champ => this.championsSelected.includes(champ))
+      .map(champ => champ.name)
+      .sort()
+      .join(", ");
+  }
+
+  mandatorySelected(challenge: Challenge) {
+    this.mandatorySelection.toggle(challenge);
+    this.championsRecommended = this.getRecommendedChampions();
+  }
+
   championsSelectedChanged(index: number) {
     this.searchChampTerm[index] = "";
     this.championsRecommended = this.getRecommendedChampions();
@@ -131,16 +148,18 @@ export class SwiftBuilderComponent {
         return {
           champions: this.getUnselectedAvailableChampionsList(chall),
           synergyPoints: synergyPoints,
-          synergyRequired: synergyRequired
+          synergyRequired: synergyRequired,
+          isMandatory: this.mandatorySelection.isSelected(chall)
         };
       })
       .forEach(synergyDetails => {
         synergyDetails.champions.forEach(champ => {
           let currentScore = championsRecommendationScore.get(champ) ?? 0;
-          championsRecommendationScore.set(champ, currentScore + (synergyDetails.synergyPoints * 2 + 1)  / synergyDetails.synergyRequired);
+          let mandatoryMultiplier = synergyDetails.isMandatory ? 100 : 1;
+          let newScore = currentScore + (mandatoryMultiplier * synergyDetails.synergyPoints * 2 + 1)  / synergyDetails.synergyRequired;
+          championsRecommendationScore.set(champ, newScore);
         })    
       });
-      console.log(championsRecommendationScore);
     return this.championsToSelect.slice().sort((champA, champB) => {
       return (championsRecommendationScore.get(champB) ?? 0) - (championsRecommendationScore.get(champA) ?? 0);
     }).slice(0, 5).map(ch => ch.name).join(", ");
